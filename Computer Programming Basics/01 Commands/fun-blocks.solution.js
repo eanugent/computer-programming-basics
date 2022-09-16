@@ -2,22 +2,19 @@ async function run(){
   drawAvatar(200,50)
   await sleep(1000)
   
-  moveAvatar('x', -50)
-  await sleep(1000)
-  
-  moveAvatar('y', 50)
+  changeAvatarColor('red')
+  moveAvatar('y', 200)
   await sleep(1000)
   
   changeAvatarColor('yellow')
-  moveAvatar('y', 50)
+  moveAvatar('x', -100)
+  moveAvatar('y', -150)
   await sleep(1000)
   
   changeAvatarColor('green')
-  moveAvatar('y', -50)
   moveAvatar('x', -50)
-  await sleep(1000)
-  
   moveAvatar('y', -50)
+  await sleep(1000)
 }
 
 /***********************************************

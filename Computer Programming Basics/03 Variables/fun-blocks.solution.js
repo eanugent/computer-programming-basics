@@ -1,3 +1,5 @@
+let avatarColor
+
 async function run(){
   let defaultSleepTime = 1000
   let color1 = 'red'
@@ -24,29 +26,28 @@ async function run(){
   await sleep(defaultSleepTime)
 }
 
-async function moveAvatarLeft(spaces){
-  moveAvatar('x', -spaces)
+function moveAvatarLeft(spaces){
+  moveAvatar('x', -1 * spaces)
 }
 
-async function moveAvatarRight(spaces){
+function moveAvatarRight(spaces){
   moveAvatar('x', spaces)
 }
 
-async function moveAvatarUp(spaces){
-  moveAvatar('y', -spaces)
+function moveAvatarUp(spaces){
+  moveAvatar('y', -1 * spaces)
 }
 
-async function moveAvatarDown(spaces){
+function moveAvatarDown(spaces){
   moveAvatar('y', spaces)
 }
 
 /***********************************************
  * Supporting Functions - MODIFY WITH CAUTION
  ************************************************/
-let context = null
+let context
 let currentX = -1
 let currentY = -1
-let avatarColor = 'blue'
 
 function initialize(){
   let canvas = document.querySelector('#playarea')
@@ -104,7 +105,7 @@ function moveAvatar(axis, spaces){
   else if(axis == "y"){
     currentY += spaces
   }
-  console.log(`move ${axis} ${spaces} spaces`)
+
   drawAvatar()
 }
 

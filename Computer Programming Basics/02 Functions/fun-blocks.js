@@ -3,24 +3,27 @@ async function run(){
   await sleep(1000)
   
   changeAvatarColor('red')
-  moveAvatar('y', 200)
+  moveAvatarDown(200)
   await sleep(1000)
   
   changeAvatarColor('yellow')
-  moveAvatar('x', -100)
+  moveAvatarLeft(100) // replaced moveAvatar('x', -100)
   moveAvatar('y', -150)
   await sleep(1000)
   
   changeAvatarColor('green')
   moveAvatar('x', -50)
   moveAvatar('y', -50)
-  await sleep(1000)
+}
+
+function moveAvatarLeft(spaces){
+  moveAvatar('x', -1 * spaces)
 }
 
 /***********************************************
  * Supporting Functions - MODIFY WITH CAUTION
  ************************************************/
-let context = null
+let context
 let currentX = -1
 let currentY = -1
 let avatarColor = 'blue'
@@ -81,7 +84,7 @@ function moveAvatar(axis, spaces){
   else if(axis == "y"){
     currentY += spaces
   }
-  console.log(`move ${axis} ${spaces} spaces`)
+
   drawAvatar()
 }
 

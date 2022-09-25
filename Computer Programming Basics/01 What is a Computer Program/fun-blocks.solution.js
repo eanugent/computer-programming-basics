@@ -14,13 +14,12 @@ async function run(){
   changeAvatarColor('green')
   moveAvatar('x', -50)
   moveAvatar('y', -50)
-  await sleep(1000)
 }
 
 /***********************************************
  * Supporting Functions - MODIFY WITH CAUTION
  ************************************************/
-let context = null
+let context
 let currentX = -1
 let currentY = -1
 let avatarColor = 'blue'
@@ -81,7 +80,7 @@ function moveAvatar(axis, spaces){
   else if(axis == "y"){
     currentY += spaces
   }
-  console.log(`move ${axis} ${spaces} spaces`)
+
   drawAvatar()
 }
 

@@ -11,17 +11,17 @@ const needleMoveIncrement = 5
 const maxNeedles = 3
 const escapedBlockPoints = 1
 const hitBlockPoints = 3
-const levelLength = 10
+const levelLength = 10 // in seconds
 
-let context = null
-let screenHeight = null
-let screenWidth = null
-let currentY = null
-let avatarMoveDirection = null // -1 for left, 0 for not moving, 1 for right
+let context
+let screenHeight
+let screenWidth
+let currentY
+let avatarMoveDirection // -1 for left, 0 for not moving, 1 for right
 let avatarColor = 'blue'
 let level = 1
-let blockInterval = null
-let levelInterval = null
+let blockInterval
+let levelInterval
 let score = 0
 
 let running = false
@@ -32,7 +32,6 @@ function initialize(){
   
   screenHeight = document.getElementById('playarea').clientHeight;
   screenWidth = document.getElementById('playarea').clientWidth;
-
 
   document.addEventListener('keydown', (e) => keyDown(e));
   document.addEventListener('keyup', (e) => keyUp (e));
@@ -46,11 +45,9 @@ function newGame(){
   avatar.x = 0
   avatar.y = screenHeight - blockHeight
   avatarMoveDirection = 0
-  level = 0
-  score = 0
-  refreshLevel()
-  refreshScore()
-
+  setLevel(1)
+  setScore(0)
+  
   context.clearRect(0,0,screenWidth,screenHeight)
   running = true;
   refreshScreen();
@@ -63,8 +60,7 @@ function newGame(){
 			window.clearInterval(levelInterval)
 
   levelInterval = window.setInterval(() => {
-    level++
-    refreshLevel()
+    setLevel(level + 1)
   }, levelLength * 1000)
 }
 
@@ -187,13 +183,11 @@ function refreshScreen(){
     clearBlock(block);
 
     if(needleHitBlock(block)){
-      score += hitBlockPoints
-      refreshScore()
+      setScore(score + hitBlockPoints)
       blocksToRemove.push(i)
     }
     else if(block.y >= screenHeight){
-      score += escapedBlockPoints
-      refreshScore()
+      setScore(score + escapedBlockPoints)
       blocksToRemove.push(i)
     }
     else{
@@ -231,11 +225,13 @@ function refreshScreen(){
   window.requestAnimationFrame(() => this.refreshScreen());
 }
 
-function refreshScore(){
+function setScore(newScore){
+  score = newScore
   document.getElementById('spScore').innerHTML = score;
 }
 
-function refreshLevel(){
+function setLevel(newLevel){
+  level = newLevel
   document.getElementById('spLevel').innerHTML = level;
 }
 

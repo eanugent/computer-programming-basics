@@ -23,7 +23,7 @@ async function run(){
 /***********************************************
  * Supporting Functions - MODIFY WITH CAUTION
  ************************************************/
-let context = null
+let context
 let currentX = -1
 let currentY = -1
 let avatarColor = 'blue'
@@ -84,7 +84,7 @@ function moveAvatar(axis, spaces){
   else if(axis == "y"){
     currentY += spaces
   }
-  console.log(`move ${axis} ${spaces} spaces`)
+
   drawAvatar()
 }
 

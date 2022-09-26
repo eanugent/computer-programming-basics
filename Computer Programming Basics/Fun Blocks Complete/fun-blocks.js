@@ -22,6 +22,13 @@ const maxNeedles = 3 // Maximum needles shot at a time
 const escapedBlockPoints = 1 // points earned when a block falls to the ground
 const hitBlockPoints = 3 // points earned when a needle hits a block
 const levelLength = 10 // in seconds
+const soundFiles = {
+  blockGone: 'block_hit_ground.wav',
+  shootNeedle: 'shoot_needle.wav',
+  blockDestroyed: 'beep.wav',
+  levelUp: 'next_level.wav',
+  gameOver: 'game_over.wav'
+}
 
 let context
 let screenHeight
@@ -70,10 +77,12 @@ function newGame(){
 
   levelInterval = window.setInterval(() => {
     setLevel(level + 1)
+    playSound(soundFiles.levelUp)
   }, levelLength * 1000)
 }
 
 function endGame(){
+  playSound(soundFiles.gameOver)
   running = false
   window.clearInterval(levelInterval)
 }
@@ -109,6 +118,7 @@ function addNeedle(){
   }
 
   needles.push(newNeedle)
+  playSound(soundFiles.shootNeedle)
 }
 
 function clearBlock(block){
@@ -211,11 +221,13 @@ function redrawFallingBlocks(){
     clearBlock(block);
 
     if(needleHitBlock(block)){
+      playSound(soundFiles.blockDestroyed)
       const newScore = score + hitBlockPoints
       setScore(newScore)
       blocksToRemove.push(i)
     }
     else if(block.y >= screenHeight){
+      playSound(soundFiles.blockGone)
       const newScore = score + escapedBlockPoints
       setScore(newScore)
       blocksToRemove.push(i)
@@ -265,6 +277,10 @@ function setLevel(newLevel){
   document.getElementById('spLevel').innerHTML = level;
 }
 
+function playSound(filename){
+  var audio = new Audio(filename);
+  audio.play();
+}
 
 function keyDown(ev){
   if(ev.defaultPrevented)

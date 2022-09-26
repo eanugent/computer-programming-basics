@@ -1,4 +1,4 @@
-let avatarColor
+let avatar
 
 async function run(){
   let defaultSleepTime = 1000
@@ -6,9 +6,13 @@ async function run(){
   let color2 = 'yellow'
   let color3 = 'green'
 
-  avatarColor = 'gray'
+  avatar = {
+    x: 200,
+    y: 50,
+    color: 'gray'
+  }
 
-  drawAvatar(200,50)
+  drawAvatar()
   await sleep(defaultSleepTime)
   
   changeAvatarColor(color1)
@@ -42,12 +46,35 @@ function moveAvatarDown(spaces){
   moveAvatar('y', spaces)
 }
 
+function changeAvatarColor(color){
+  avatar.color = color
+  drawAvatar()
+}
+
+function setAvatarX(newX){
+  avatar.x = newX
+}
+
+function setAvatarY(newY){
+  avatar.y = newY
+}
+
+function getAvatarX(){
+  return avatar.x
+}
+
+function getAvatarY(){
+  return avatar.y
+}
+
+function getAvatarColor(){
+  return avatar.color
+}
+
 /***********************************************
  * Supporting Functions - MODIFY WITH CAUTION
  ************************************************/
 let context
-let currentX = -1
-let currentY = -1
 
 function initialize(){
   let canvas = document.querySelector('#playarea')
@@ -70,40 +97,31 @@ function drawTargetBlocks(){
   )
 }
 
-function changeAvatarColor(color){
-  avatarColor = color
-  drawAvatar()
+function clearAvatar(){
+  if(getAvatarX() >= 0 && getAvatarY() >= 0)
+    context.clearRect(getAvatarX(), getAvatarY(), 50, 50)
 }
 
-function drawAvatar(x = null, y = null){
+function drawAvatar(){
   clearAvatar()
-  if(x !==null)
-    currentX = x
-  if(y !==null)
-    currentY = y
 
-  context.fillStyle = avatarColor
+  context.fillStyle = getAvatarColor()
   context.fillRect(
-    currentX,
-    currentY,
+    getAvatarX(),
+    getAvatarY(),
     50,
     50
   )
-}
-
-function clearAvatar(){
-  if(currentX >= 0 && currentY >= 0)
-    context.clearRect(currentX, currentY, 50, 50)
 }
 
 function moveAvatar(axis, spaces){
   clearAvatar()
 
   if(axis == "x"){
-    currentX += spaces
+    setAvatarX(getAvatarX() + spaces)
   }
   else if(axis == "y"){
-    currentY += spaces
+    setAvatarY(getAvatarY() + spaces)
   }
 
   drawAvatar()

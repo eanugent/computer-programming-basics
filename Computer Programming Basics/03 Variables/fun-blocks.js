@@ -11,13 +11,13 @@ async function run(){
   await sleep(1000)
 
   changeAvatarColor('yellow')
-  moveAvatarLeft(100)
-  moveAvatarUp(150)
+  moveAvatarLeft(50)
+  moveAvatarUp(100)
   await sleep(1000)
 
   changeAvatarColor('green')
-  moveAvatarLeft(50)
-  moveAvatarUp(50)
+  moveAvatarLeft(100)
+  moveAvatarUp(100)
 }
 
 function moveAvatarLeft(spaces){
@@ -60,7 +60,7 @@ function drawTargetBlocks(){
   )
   
   context.fillRect(
-    250, 250, 50, 50
+    200, 250, 50, 50
   )
 }
 
@@ -80,14 +80,14 @@ function drawAvatar(x = null, y = null){
   context.fillRect(
     currentX,
     currentY,
-    100,
-    100
+    50,
+    50
   )
 }
 
 function clearAvatar(){
   if(currentX >= 0 && currentY >= 0)
-    context.clearRect(currentX, currentY, 100, 100)
+    context.clearRect(currentX, currentY, 50, 50)
 }
 
 function moveAvatar(axis, spaces){

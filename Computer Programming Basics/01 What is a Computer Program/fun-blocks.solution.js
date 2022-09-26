@@ -41,7 +41,7 @@ function drawTargetBlocks(){
   )
   
   context.fillRect(
-    250, 250, 50, 50
+    200, 250, 50, 50
   )
 }
 
@@ -61,14 +61,14 @@ function drawAvatar(x = null, y = null){
   context.fillRect(
     currentX,
     currentY,
-    100,
-    100
+    50,
+    50
   )
 }
 
 function clearAvatar(){
   if(currentX >= 0 && currentY >= 0)
-    context.clearRect(currentX, currentY, 100, 100)
+    context.clearRect(currentX, currentY, 50, 50)
 }
 
 function moveAvatar(axis, spaces){

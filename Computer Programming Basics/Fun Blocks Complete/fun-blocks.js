@@ -1,16 +1,26 @@
-const blockWidth = 50
-const blockHeight = 50
+const avatarWidth = 50
+const avatarHeight = 50
+const fallingBlockWidth = 50
+const fallingBlockHeight = 50
 const avatarMoveIncrement = 5
-const avatar = { x: null, y: null }
+const avatarColor = 'blue'
+const avatar = {
+  x: null,
+  y: null,
+  width: avatarWidth,
+  height: avatarHeight,
+  color: avatarColor
+}
 const fallingBlockMoveIncrement = 5
 const fallingBlocks = []
+const fallingBlockColor = 'red'
 const needles = []
 const needleWidth = 1
 const needleHeight = 5
 const needleMoveIncrement = 5
-const maxNeedles = 3
-const escapedBlockPoints = 1
-const hitBlockPoints = 3
+const maxNeedles = 3 // Maximum needles shot at a time
+const escapedBlockPoints = 1 // points earned when a block falls to the ground
+const hitBlockPoints = 3 // points earned when a needle hits a block
 const levelLength = 10 // in seconds
 
 let context
@@ -18,7 +28,6 @@ let screenHeight
 let screenWidth
 let currentY
 let avatarMoveDirection // -1 for left, 0 for not moving, 1 for right
-let avatarColor = 'blue'
 let level = 1
 let blockInterval
 let levelInterval
@@ -43,14 +52,14 @@ function newGame(){
   fallingBlocks.length = 0
   needles.length = 0
   avatar.x = 0
-  avatar.y = screenHeight - blockHeight
+  avatar.y = screenHeight - avatar.height
   avatarMoveDirection = 0
   setLevel(1)
   setScore(0)
   
   context.clearRect(0,0,screenWidth,screenHeight)
   running = true;
-  refreshScreen();
+  redrawScreen();
   if(blockInterval)
 			window.clearInterval(blockInterval);
 
@@ -74,8 +83,11 @@ function addFallingBlock(){
 	  return
 
   const newBlock = {
-    x: Math.floor(Math.random() * (screenWidth - blockWidth)),
-    y: 0
+    x: Math.floor(Math.random() * (screenWidth - fallingBlockWidth)),
+    y: 0,
+    width: fallingBlockWidth,
+    height: fallingBlockHeight,
+    color: fallingBlockColor
   }
 
   fallingBlocks.push(newBlock)
@@ -90,63 +102,68 @@ function addNeedle(){
     return
 
   const newNeedle = {
-    x: avatar.x + (blockWidth / 2),
-    y: avatar.y
+    x: avatar.x + (fallingBlockWidth / 2),
+    y: avatar.y,
+    width: needleWidth,
+    height: needleHeight
   }
 
   needles.push(newNeedle)
 }
 
-function clearBlock(point){
-  context.clearRect(point.x, point.y, blockWidth, blockHeight)
-}
-
-function drawBlock(point, color){
-  //console.log(`Drawing ${color} block at ${point.x}, ${point.y}`)
-  context.fillStyle = color
-  context.fillRect(
-    point.x,
-    point.y,
-    blockWidth,
-    blockHeight
-  )
-}
-
-function clearNeedle(point){
+function clearBlock(block){
   context.clearRect(
-    point.x,
-    point.y,
-    needleWidth,
-    needleHeight
+    block.x,
+    block.y,
+    block.width,
+    block.height
+    )
+}
+
+function drawBlock(block){
+  context.fillStyle = block.color
+  context.fillRect(
+    block.x,
+    block.y,
+    block.width,
+    block.height
   )
 }
 
-function drawNeedle(point){
+function clearNeedle(needle){
+  context.clearRect(
+    needle.x,
+    needle.y,
+    needle.width,
+    needle.height
+  )
+}
+
+function drawNeedle(needle){
   context.fillStyle = 'white'
   context.fillRect(
-    point.x,
-    point.y,
-    needleWidth,
-    needleHeight
+    needle.x,
+    needle.y,
+    needle.width,
+    needle.height
   )
 }
 
-function blockHitAvatar(point){
-  const xInRange = point.x >= (avatar.x - blockWidth) && point.x <= (avatar.x + blockWidth)
-  const yInRange = point.y >= (avatar.y - blockHeight) && point.y <= (avatar.y + blockHeight)
+function blockHitAvatar(block){
+  const xInRange = block.x >= (avatar.x - block.width) && block.x <= (avatar.x + block.width)
+  const yInRange = block.y >= (avatar.y - block.height) && block.y <= (avatar.y + block.height)
 
   return xInRange && yInRange
 }
 
-function needleHitBlock(point){
+function needleHitBlock(block){
   let needleHitIndex = -1
   for(let i=0; i < needles.length; i++){
     const needle = needles[i]
-    xInRange = needle.x >= point.x && needle.x <= (point.x + blockWidth)
-    yInRange = needle.y <= (point.y + blockHeight)
+    xInRange = needle.x >= block.x && needle.x <= (block.x + block.width)
+    yInRange = needle.y <= (block.y + block.height)
 
     if(xInRange && yInRange){
-      console.log('hit needle')
       clearNeedle(needles[i])
       needleHitIndex = i
       break
@@ -160,17 +177,28 @@ function needleHitBlock(point){
   return false
 }
 
-function refreshScreen(){
+function redrawScreen(){
   if(!running)
     return
 
+  redrawAvatar()
+  redrawFallingBlocks()
+  redrawNeedles()
+
+  window.requestAnimationFrame(() => this.redrawScreen());
+}
+
+function redrawAvatar(){
   clearBlock(avatar)
-  avatar.x = avatar.x + (avatarMoveDirection * avatarMoveIncrement)
-  avatar.x = Math.min(avatar.x, screenWidth - blockWidth)
-  avatar.x = Math.max(0, avatar.x)
 
-  drawBlock(avatar, avatarColor)
+  avatar.x += avatarMoveDirection * avatarMoveIncrement
+  avatar.x = Math.min(avatar.x, screenWidth - avatar.width) // not too far right
+  avatar.x = Math.max(0, avatar.x) // not too far left
 
+  drawBlock(avatar)
+}
+
+function redrawFallingBlocks(){
   const blocksToRemove = []
   for(let i = 0; i < fallingBlocks.length; i++){
     const block = fallingBlocks[i];
@@ -183,11 +211,13 @@ function refreshScreen(){
     clearBlock(block);
 
     if(needleHitBlock(block)){
-      setScore(score + hitBlockPoints)
+      const newScore = score + hitBlockPoints
+      setScore(newScore)
       blocksToRemove.push(i)
     }
     else if(block.y >= screenHeight){
-      setScore(score + escapedBlockPoints)
+      const newScore = score + escapedBlockPoints
+      setScore(newScore)
       blocksToRemove.push(i)
     }
     else{
@@ -202,9 +232,11 @@ function refreshScreen(){
 
   // Draw Blocks
   for(let i = 0; i < fallingBlocks.length; i++){
-    drawBlock(fallingBlocks[i], 'red')
+    drawBlock(fallingBlocks[i])
   }
+}
 
+function redrawNeedles(){
   const needlesToRemove = []
   for(let i=0; i < needles.length; i++){
     const needle = needles[i]
@@ -221,8 +253,6 @@ function refreshScreen(){
   for(let i=0; i < needlesToRemove.length; i++){
     needles.splice(needlesToRemove[i], 1)
   }
-
-  window.requestAnimationFrame(() => this.refreshScreen());
 }
 
 function setScore(newScore){

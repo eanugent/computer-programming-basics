@@ -1,4 +1,6 @@
 let avatarColor
+let avatarX = null
+let avatarY = null
 
 async function run(){
   let defaultSleepTime = 1000
@@ -8,7 +10,9 @@ async function run(){
 
   avatarColor = 'gray'
 
-  drawAvatar(200,50)
+  avatarX = 200
+  avatarY = 50
+  drawAvatar()
   await sleep(defaultSleepTime)
   
   changeAvatarColor(color1)
@@ -42,12 +46,35 @@ function moveAvatarDown(spaces){
   moveAvatar('y', spaces)
 }
 
+function changeAvatarColor(color){
+  avatarColor = color
+  drawAvatar()
+}
+
+function setAvatarX(newX){
+  avatarX = newX
+}
+
+function setAvatarY(newY){
+  avatarY = newY
+}
+
+function getAvatarX(){
+  return avatarX
+}
+
+function getAvatarY(){
+  return avatarY
+}
+
+function getAvatarColor(){
+  return avatarColor
+}
+
 /***********************************************
  * Supporting Functions - MODIFY WITH CAUTION
  ************************************************/
 let context
-let currentX = -1
-let currentY = -1
 
 function initialize(){
   let canvas = document.querySelector('#playarea')
@@ -70,40 +97,31 @@ function drawTargetBlocks(){
   )
 }
 
-function changeAvatarColor(color){
-  avatarColor = color
-  drawAvatar()
+function clearAvatar(){
+  if(getAvatarX() >= 0 && getAvatarY() >= 0)
+    context.clearRect(getAvatarX(), getAvatarY(), 50, 50)
 }
 
-function drawAvatar(x = null, y = null){
+function drawAvatar(){
   clearAvatar()
-  if(x !==null)
-    currentX = x
-  if(y !==null)
-    currentY = y
 
-  context.fillStyle = avatarColor
+  context.fillStyle = getAvatarColor()
   context.fillRect(
-    currentX,
-    currentY,
+    getAvatarX(),
+    getAvatarY(),
     50,
     50
   )
-}
-
-function clearAvatar(){
-  if(currentX >= 0 && currentY >= 0)
-    context.clearRect(currentX, currentY, 50, 50)
 }
 
 function moveAvatar(axis, spaces){
   clearAvatar()
 
   if(axis == "x"){
-    currentX += spaces
+    setAvatarX(getAvatarX() + spaces)
   }
   else if(axis == "y"){
-    currentY += spaces
+    setAvatarY(getAvatarY() + spaces)
   }
 
   drawAvatar()

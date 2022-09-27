@@ -1,36 +1,9 @@
-let avatar
-let blocks
-
-async function run(){
-  let defaultSleepTime = 1000
-  let color1 = 'red'
-  let color2 = 'yellow'
-  let color3 = 'green'
-
-  avatar = {
-    x: 200,
-    y: 50,
-    color: 'gray'
-  }
-
-  drawTargetBlocks()
-  drawAvatar()
-  await sleep(defaultSleepTime)
-  
-  changeAvatarColor(color1)
-  moveAvatarDown(200)
-  await sleep(defaultSleepTime)
-
-  changeAvatarColor(color2)
-  moveAvatarLeft(50)
-  moveAvatarUp(100)
-  await sleep(defaultSleepTime)
-
-  changeAvatarColor(color3)
-  moveAvatarLeft(100)
-  moveAvatarUp(100)
-  await sleep(defaultSleepTime)
+let avatar = {
+  x: 200,
+  y: 50,
+  color: 'gray'
 }
+let blocks
 
 function moveAvatarLeft(spaces){
   moveAvatar('x', -1 * spaces)
@@ -82,6 +55,30 @@ function drawTargetBlocks(){
   drawBlocks(blocks)
 }
 
+function moveAvatar(axis, spaces){
+  clearAvatar()
+
+  if(axis == 'x'){
+    avatar.x = avatar.x + spaces
+  }
+  else if(axis == 'y'){
+    avatar.y = avatar.y + spaces
+  }
+
+  let blockIndex = indexOfBlockHitByAvatar()
+  if(blockIndex > -1){
+    playSound('beep.wav')
+    context.clearRect(blocks[blockIndex].x, blocks[blockIndex].y, 50, 50)
+    blocks.splice(blockIndex, 1)
+  }
+
+  drawAvatar()
+}
+
+function keyDownHandler(key){
+  console.log(key)
+}
+
 /***********************************************
  * Supporting Functions - MODIFY WITH CAUTION
  ************************************************/
@@ -90,6 +87,10 @@ let context
 function initialize(){
   let canvas = document.querySelector('#playarea')
   context = canvas.getContext('2d')
+
+  document.addEventListener('keydown', async (e) => {
+      keyDownHandler(e.key)
+  }); 
 }
 
 function drawBlock(block){
@@ -103,6 +104,27 @@ function drawBlocks(blocks){
   for(let i = 0; i < blocks.length; i++){
     drawBlock(blocks[i])
   }
+}
+
+function indexOfBlockHitByAvatar(){
+  for(let i=0; i < blocks.length; i++){
+    if(blockHitAvatar(blocks[i]))
+      return i
+  }
+  return -1
+}
+
+function blockHitAvatar(block){
+  const xInRange = block.x >= (avatar.x - 50) && block.x <= (avatar.x + 50)
+  const yInRange = block.y >= (avatar.y - 50) && block.y <= (avatar.y + 50)
+
+  return xInRange && yInRange
+}
+
+
+function playSound(filename){
+  var audio = new Audio(filename);
+  audio.play();
 }
 
 function clearAvatar(){
@@ -122,24 +144,8 @@ function drawAvatar(){
   )
 }
 
-function moveAvatar(axis, spaces){
-  clearAvatar()
-
-  if(axis == "x"){
-    setAvatarX(getAvatarX() + spaces)
-  }
-  else if(axis == "y"){
-    setAvatarY(getAvatarY() + spaces)
-  }
-
-  drawAvatar()
-}
-
-function sleep(ms){
-  return new Promise(resolve => setTimeout(resolve, ms))  
-}
-
 window.onload = async function(){
   initialize()
-  await run()
+  drawAvatar()
+  drawTargetBlocks()
 }

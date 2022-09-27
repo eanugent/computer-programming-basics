@@ -1,4 +1,5 @@
 let avatar
+let blocks
 
 async function run(){
   let defaultSleepTime = 1000
@@ -78,7 +79,24 @@ function drawTargetBlocks(){
   blocks.push({ x: 150, y: 150 })
   blocks.push({ x: 200, y: 250 })
 
-  drawBlocks(blocks)
+  drawBlocks()
+}
+
+function moveAvatar(axis, spaces){
+  clearAvatar()
+
+  if(axis == 'x'){
+    avatar.x = avatar.x + spaces
+  }
+  else if(axis == 'y'){
+    avatar.y = avatar.y + spaces
+  }
+
+  if(avatarHitAnyBlock()){
+    playSound('beep.wav')
+  }
+
+  drawAvatar()
 }
 
 /***********************************************
@@ -89,6 +107,12 @@ let context
 function initialize(){
   let canvas = document.querySelector('#playarea')
   context = canvas.getContext('2d')
+
+  document.addEventListener('keydown', async (e) => {
+    if(e.key == ' '){
+      await run()
+    }
+  });  
 }
 
 function drawBlock(block){
@@ -98,11 +122,33 @@ function drawBlock(block){
   )
 }
 
-function drawBlocks(blocks){
+function drawBlocks(){
   for(let i = 0; i < blocks.length; i++){
     drawBlock(blocks[i])
   }
 }
+
+function avatarHitAnyBlock(){
+  for(let i=0; i < blocks.length; i++){
+    if(blockHitAvatar(blocks[i]))
+      return true
+  }
+  return false
+}
+
+function blockHitAvatar(block){
+  const xInRange = block.x >= (avatar.x - 50) && block.x <= (avatar.x + 50)
+  const yInRange = block.y >= (avatar.y - 50) && block.y <= (avatar.y + 50)
+
+  return xInRange && yInRange
+}
+
+
+function playSound(filename){
+  var audio = new Audio(filename);
+  audio.play();
+}
+
 function clearAvatar(){
   if(getAvatarX() >= 0 && getAvatarY() >= 0)
     context.clearRect(getAvatarX(), getAvatarY(), 50, 50)
@@ -120,24 +166,10 @@ function drawAvatar(){
   )
 }
 
-function moveAvatar(axis, spaces){
-  clearAvatar()
-
-  if(axis == "x"){
-    setAvatarX(getAvatarX() + spaces)
-  }
-  else if(axis == "y"){
-    setAvatarY(getAvatarY() + spaces)
-  }
-
-  drawAvatar()
-}
-
 function sleep(ms){
   return new Promise(resolve => setTimeout(resolve, ms))  
 }
 
 window.onload = async function(){
   initialize()
-  await run()
 }

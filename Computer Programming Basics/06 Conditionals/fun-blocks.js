@@ -1,4 +1,5 @@
 let avatar
+let blocks
 
 async function run(){
   let defaultSleepTime = 1000
@@ -84,15 +85,15 @@ function drawTargetBlocks(){
 function moveAvatar(axis, spaces){
   clearAvatar()
 
-  if(axis == "x"){
-    avatar.x += spaces
-  }
-  else if(axis == "y"){
-    avatar.y += spaces
-  }
+  /*
+    Update avatar.x or avatar.y
+  */
 
-  var audio = new Audio('beep.wav');
-  audio.play();
+  /*
+    Bonus:
+    Use playSound('beep.wav') to make
+    a sound if avatarHitAnyBlock() is true
+  */
 
   drawAvatar()
 }
@@ -105,6 +106,12 @@ let context
 function initialize(){
   let canvas = document.querySelector('#playarea')
   context = canvas.getContext('2d')
+
+  document.addEventListener('keydown', async (e) => {
+    if(e.key == ' '){
+      await run()
+    }
+  });
 }
 
 function drawBlock(block){
@@ -120,19 +127,25 @@ function drawBlocks(blocks){
   }
 }
 
-function drawTargetBlocks(){
-  context.fillStyle = 'purple'
-  context.fillRect(
-    50, 50, 50, 50
-  )
+function avatarHitAnyBlock(){
+  for(let i=0; i < blocks.length; i++){
+    if(blockHitAvatar(blocks[i]))
+      return true
+  }
+  return false
+}
 
-  context.fillRect(
-    150, 150, 50, 50
-  )
-  
-  context.fillRect(
-    200, 250, 50, 50
-  )
+function blockHitAvatar(block){
+  const xInRange = block.x >= (avatar.x - block.width) && block.x <= (avatar.x + block.width)
+  const yInRange = block.y >= (avatar.y - block.height) && block.y <= (avatar.y + block.height)
+
+  return xInRange && yInRange
+}
+
+
+function playSound(filename){
+  var audio = new Audio(filename);
+  audio.play();
 }
 
 function clearAvatar(){
@@ -158,5 +171,4 @@ function sleep(ms){
 
 window.onload = async function(){
   initialize()
-  await run()
 }

@@ -51,8 +51,6 @@ function initialize(){
 
   document.addEventListener('keydown', (e) => keyDown(e));
   document.addEventListener('keyup', (e) => keyUp (e));
-
-  newGame()
 }
 
 function newGame(){

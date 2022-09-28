@@ -55,11 +55,9 @@ function drawTargetBlocks(){
   drawBlocks(blocks)
 }
 
-function drawBlocks(blocks){
-  let index = 0
-  while(index < blocks.length){
+function drawBlocks(blocks){  
+  for(let index = 0; index < blocks.length; index = index + 1){
     drawBlock(blocks[index])
-    index = index + 1
   }
 }
 

@@ -56,11 +56,10 @@ function drawTargetBlocks(){
 }
 
 function drawBlocks(blocks){
-  let index = 0
-  while(index < blocks.length){
-    drawBlock(blocks[index])
-    index = index + 1
-  }
+  /*
+   * Use a for loop to call drawBlock()
+   * for each block in blocks
+   */
 }
 
 function moveAvatar(axis, spaces){

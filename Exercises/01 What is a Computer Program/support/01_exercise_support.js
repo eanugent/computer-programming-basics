@@ -6,6 +6,8 @@ let running = false
 
 function initialize(){
   let canvas = document.querySelector('#playarea')
+  canvas.setAttribute('width', '450');
+  canvas.setAttribute('width', '450');
   context = canvas.getContext('2d')
 }
 

@@ -2,6 +2,7 @@ async function run(){
   drawAvatar(200,50)
   await sleep(1000)
   
+  changeAvatarColor('red')
   moveAvatar('x', -50)
   await sleep(1000)
   

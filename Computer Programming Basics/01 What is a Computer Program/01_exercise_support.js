@@ -1,37 +1,12 @@
-async function run(){
-  drawAvatar(200,50)
-  await sleep(1000)
-  
-  moveAvatar('x', -50)
-  await sleep(1000)
-  
-  moveAvatar('y', 50)
-  await sleep(1000)
-  
-  changeAvatarColor('yellow')
-  moveAvatar('y', 50)
-  await sleep(1000)
-  
-  changeAvatarColor('green')
-  moveAvatar('y', -50)
-  moveAvatar('x', -50)
-  await sleep(1000)
-  
-  moveAvatar('y', -50)
-}
-
-/***********************************************
- * Supporting Functions - MODIFY WITH CAUTION
- ************************************************/
 let context
 let currentX = -1
 let currentY = -1
 let avatarColor = 'blue'
+let running = false
 
 function initialize(){
   let canvas = document.querySelector('#playarea')
   context = canvas.getContext('2d')
-  drawTargetBlocks()
 }
 
 function drawTargetBlocks(){
@@ -94,5 +69,15 @@ function sleep(ms){
 
 window.onload = async function(){
   initialize()
-  await run()
+
+  document.addEventListener('keydown', async (e) =>{
+    if(running) return
+    if(e.key == ' '){
+      running = true
+      context.clearRect(0,0,450,450)
+      drawTargetBlocks()
+      await run()
+      running = false
+    }
+  })
 }

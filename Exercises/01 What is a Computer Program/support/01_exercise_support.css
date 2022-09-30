@@ -1,0 +1,31 @@
+canvas#playarea {
+  border: solid 0.3em;
+  border-color: yellow;
+}
+
+body {
+  background: #1E1F21;
+  color: #EEEFF1;
+}
+
+:link {
+  color: #BAD7FF;
+}
+
+:visited {
+  color: #F6BAFF;
+}
+
+.game-container {
+  display: flex;
+  margin: auto;
+}
+
+.game-canvas {
+  flex: 1;
+}
+
+.game-info {
+  flex: 2;
+  margin-left: 15px;
+}

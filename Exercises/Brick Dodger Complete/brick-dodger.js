@@ -1,9 +1,10 @@
 const avatarWidth = 50
-const avatarHeight = 50
+const avatarHeight = 20
 const fallingBlockWidth = 50
-const fallingBlockHeight = 50
+const fallingBlockHeight = 25
+const brickHoleSize = fallingBlockWidth / 16
 const avatarMoveIncrement = 5
-const avatarColor = 'blue'
+const avatarColor = '#FFD733'
 const avatar = {
   x: null,
   y: null,
@@ -13,10 +14,11 @@ const avatar = {
 }
 const fallingBlockMoveIncrement = 5
 const fallingBlocks = []
-const fallingBlockColor = 'red'
+const fallingBlockColor = '#ca6843'
 const needles = []
-const needleWidth = 1
-const needleHeight = 5
+const needleWidth = 2
+const needleHeight = 7
+const needleColor = 'black'
 const needleMoveIncrement = 5
 const maxNeedles = 3 // Maximum needles shot at a time
 const escapedBlockPoints = 1 // points earned when a block falls to the ground
@@ -33,7 +35,7 @@ const soundFiles = {
 let context
 let screenHeight
 let screenWidth
-let currentY
+let gameBackgroundColor
 let avatarMoveDirection // -1 for left, 0 for not moving, 1 for right
 let level = 1
 let blockInterval
@@ -44,10 +46,12 @@ let running = false
 
 function initialize(){
   let canvas = document.querySelector('#playarea')
-  context = canvas.getContext('2d')
   
-  screenHeight = document.getElementById('playarea').clientHeight;
-  screenWidth = document.getElementById('playarea').clientWidth;
+  gameBackgroundColor = getComputedStyle(canvas)['background-color']
+  screenHeight = canvas.clientHeight;
+  screenWidth = canvas.clientWidth;
+  
+  context = canvas.getContext('2d')
 
   document.addEventListener('keydown', (e) => keyDown(e));
   document.addEventListener('keyup', (e) => keyUp (e));
@@ -138,6 +142,48 @@ function drawBlock(block){
   )
 }
 
+function drawCirlce(circle){
+  context.fillStyle = circle.color
+  context.beginPath();
+  context.arc(circle.x, circle.y, circle.radius, 0, 2 * Math.PI);
+  context.fill();
+}
+
+function drawBrick(brick){
+  drawBlock(brick)
+  
+  leftHole = {
+    x: brick.x + (2*brickHoleSize),
+    y: brick.y + (brick.height / 2),
+    radius: brickHoleSize,
+    color: 'white'
+  }
+
+  rightHole = {
+    ...leftHole,
+    x: brick.x + brick.width - (brickHoleSize * 2)
+  }
+
+  middleHole = {
+    ...leftHole,
+    x: (leftHole.x + rightHole.x) / 2
+  }
+
+  drawCirlce(leftHole)
+  drawCirlce(rightHole)
+  drawCirlce(middleHole)
+}
+
+function drawTriangle(a, b, c, color){
+  context.beginPath();
+  context.moveTo(a.x, a.y)
+  context.lineTo(b.x, b.y)
+  context.lineTo(c.x, c.y)
+  context.closePath()
+  context.fillStyle = color
+  context.fill()
+}
+
 function clearNeedle(needle){
   context.clearRect(
     needle.x,
@@ -148,7 +194,7 @@ function clearNeedle(needle){
 }
 
 function drawNeedle(needle){
-  context.fillStyle = 'white'
+  context.fillStyle = needleColor
   context.fillRect(
     needle.x,
     needle.y,
@@ -204,6 +250,24 @@ function redrawAvatar(){
   avatar.x = Math.max(0, avatar.x) // not too far left
 
   drawBlock(avatar)
+
+  dipXIncrement = (avatar.width / 4) 
+  dipY = avatar.y + (avatar.height / 3)
+
+  drawTriangle(
+    {x: avatar.x, y: avatar.y},
+    {x: avatar.x + dipXIncrement, y: dipY},
+    {x: avatar.x + (2*dipXIncrement), y: avatar.y},
+    gameBackgroundColor
+  )
+
+  drawTriangle(
+    {x: avatar.x + (2*dipXIncrement), y: avatar.y},
+    {x: avatar.x + (3*dipXIncrement), y: dipY},
+    {x: avatar.x + avatar.width, y: avatar.y},
+    gameBackgroundColor
+  )
+  
 }
 
 function redrawFallingBlocks(){
@@ -242,7 +306,7 @@ function redrawFallingBlocks(){
 
   // Draw Blocks
   for(let i = 0; i < fallingBlocks.length; i++){
-    drawBlock(fallingBlocks[i])
+    drawBrick(fallingBlocks[i])
   }
 }
 

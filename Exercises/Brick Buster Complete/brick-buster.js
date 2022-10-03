@@ -28,7 +28,7 @@ const hitBrickPoints = 3 // points earned when a shot hits a brick
 const levelLength = 10 // in seconds
 const soundFiles = {
   brickGone: 'brick_hit_ground.wav',
-  shootShot: 'shoot_shot.wav',
+  shootShot: 'shot.wav',
   brickDestroyed: 'beep.wav',
   levelUp: 'next_level.wav',
   gameOver: 'game_over.wav'

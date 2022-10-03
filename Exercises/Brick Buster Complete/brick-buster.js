@@ -1,8 +1,10 @@
+const screenHeight = 500
+const screenWidth = 500
 const avatarWidth = 50
 const avatarHeight = 20
-const fallingBlockWidth = 50
-const fallingBlockHeight = 25
-const brickHoleSize = fallingBlockWidth / 16
+const brickWidth = 50
+const brickHeight = 25
+const brickHoleSize = brickWidth / 16
 const avatarMoveIncrement = 5
 const avatarColor = '#FFD733'
 const avatar = {
@@ -12,44 +14,47 @@ const avatar = {
   height: avatarHeight,
   color: avatarColor
 }
-const fallingBlockMoveIncrement = 5
-const fallingBlocks = []
-const fallingBlockColor = '#ca6843'
-const needles = []
-const needleWidth = 2
-const needleHeight = 7
-const needleColor = 'black'
-const needleMoveIncrement = 5
-const maxNeedles = 3 // Maximum needles shot at a time
-const escapedBlockPoints = 1 // points earned when a block falls to the ground
-const hitBlockPoints = 3 // points earned when a needle hits a block
+const brickMoveIncrement = 5
+const bricks = []
+const brickColor = '#ca6843'
+const shots = []
+const shotWidth = 2
+const shotHeight = 7
+const shotColor = 'black'
+const shotMoveIncrement = 5
+const maxShots = 3 // Maximum shots shot at a time
+const escapedBrickPoints = 1 // points earned when a brick falls to the ground
+const hitBrickPoints = 3 // points earned when a shot hits a brick
 const levelLength = 10 // in seconds
 const soundFiles = {
-  blockGone: 'block_hit_ground.wav',
-  shootNeedle: 'shoot_needle.wav',
-  blockDestroyed: 'beep.wav',
+  brickGone: 'brick_hit_ground.wav',
+  shootShot: 'shoot_shot.wav',
+  brickDestroyed: 'beep.wav',
   levelUp: 'next_level.wav',
   gameOver: 'game_over.wav'
 }
+const soundFilePath = 'https://github.com/eanugent/computer-programming-basics/raw/main/assets/'
 
 let context
-let screenHeight
-let screenWidth
 let gameBackgroundColor
 let avatarMoveDirection // -1 for left, 0 for not moving, 1 for right
 let level = 1
-let blockInterval
+let brickInterval
 let levelInterval
 let score = 0
 
 let running = false
 
 function initialize(){
-  let canvas = document.querySelector('#playarea')
+  let canvas = document.querySelector('.game-canvas')
+  
+  canvas.setAttribute('width', screenWidth);
+  canvas.setAttribute('height', screenHeight);
+
+  levelSpan = document.querySelector('#levelLength')
+  levelSpan.innerHTML = levelLength
   
   gameBackgroundColor = getComputedStyle(canvas)['background-color']
-  screenHeight = canvas.clientHeight;
-  screenWidth = canvas.clientWidth;
   
   context = canvas.getContext('2d')
 
@@ -58,8 +63,8 @@ function initialize(){
 }
 
 function newGame(){
-  fallingBlocks.length = 0
-  needles.length = 0
+  bricks.length = 0
+  shots.length = 0
   avatar.x = 0
   avatar.y = screenHeight - avatar.height
   avatarMoveDirection = 0
@@ -69,10 +74,10 @@ function newGame(){
   context.clearRect(0,0,screenWidth,screenHeight)
   running = true;
   redrawScreen();
-  if(blockInterval)
-			window.clearInterval(blockInterval);
+  if(brickInterval)
+			window.clearInterval(brickInterval);
 
-	blockInterval = window.setTimeout(() => addFallingBlock(), 1000);
+	brickInterval = window.setTimeout(() => addbrick(), 1000);
 
   if(levelInterval)
 			window.clearInterval(levelInterval)
@@ -89,56 +94,56 @@ function endGame(){
   window.clearInterval(levelInterval)
 }
 
-function addFallingBlock(){
+function addbrick(){
   if(!running)
 	  return
 
-  const newBlock = {
-    x: Math.floor(Math.random() * (screenWidth - fallingBlockWidth)),
+  const newBrick = {
+    x: Math.floor(Math.random() * (screenWidth - brickWidth)),
     y: 0,
-    width: fallingBlockWidth,
-    height: fallingBlockHeight,
-    color: fallingBlockColor
+    width: brickWidth,
+    height: brickHeight,
+    color: brickColor
   }
 
-  fallingBlocks.push(newBlock)
+  bricks.push(newBrick)
   let time = 1066 - (66 * level)
   if(time < 100)
     time = 100
-  blockInterval = window.setTimeout(() => addFallingBlock(), time)
+  brickInterval = window.setTimeout(() => addbrick(), time)
 }
 
-function addNeedle(){
-  if(!running || needles.length >= maxNeedles)
+function addShot(){
+  if(!running || shots.length >= maxShots)
     return
 
-  const newNeedle = {
-    x: avatar.x + (fallingBlockWidth / 2),
+  const newShot = {
+    x: avatar.x + (brickWidth / 2),
     y: avatar.y,
-    width: needleWidth,
-    height: needleHeight
+    width: shotWidth,
+    height: shotHeight
   }
 
-  needles.push(newNeedle)
-  playSound(soundFiles.shootNeedle)
+  shots.push(newShot)
+  playSound(soundFiles.shootShot)
 }
 
-function clearBlock(block){
+function clearRect(brick){
   context.clearRect(
-    block.x,
-    block.y,
-    block.width,
-    block.height
+    brick.x,
+    brick.y,
+    brick.width,
+    brick.height
     )
 }
 
-function drawBlock(block){
-  context.fillStyle = block.color
+function drawRect(brick){
+  context.fillStyle = brick.color
   context.fillRect(
-    block.x,
-    block.y,
-    block.width,
-    block.height
+    brick.x,
+    brick.y,
+    brick.width,
+    brick.height
   )
 }
 
@@ -150,7 +155,7 @@ function drawCirlce(circle){
 }
 
 function drawBrick(brick){
-  drawBlock(brick)
+  drawRect(brick)
   
   leftHole = {
     x: brick.x + (2*brickHoleSize),
@@ -184,48 +189,48 @@ function drawTriangle(a, b, c, color){
   context.fill()
 }
 
-function clearNeedle(needle){
+function clearShot(shot){
   context.clearRect(
-    needle.x,
-    needle.y,
-    needle.width,
-    needle.height
+    shot.x,
+    shot.y,
+    shot.width,
+    shot.height
   )
 }
 
-function drawNeedle(needle){
-  context.fillStyle = needleColor
+function drawShot(shot){
+  context.fillStyle = shotColor
   context.fillRect(
-    needle.x,
-    needle.y,
-    needle.width,
-    needle.height
+    shot.x,
+    shot.y,
+    shot.width,
+    shot.height
   )
 }
 
-function blockHitAvatar(block){
-  const xInRange = block.x >= (avatar.x - block.width) && block.x <= (avatar.x + block.width)
-  const yInRange = block.y >= (avatar.y - block.height) && block.y <= (avatar.y + block.height)
+function brickHitAvatar(brick){
+  const xInRange = brick.x >= (avatar.x - brick.width) && brick.x <= (avatar.x + brick.width)
+  const yInRange = brick.y >= (avatar.y - brick.height) && brick.y <= (avatar.y + brick.height)
 
   return xInRange && yInRange
 }
 
-function needleHitBlock(block){
-  let needleHitIndex = -1
-  for(let i=0; i < needles.length; i++){
-    const needle = needles[i]
-    xInRange = needle.x >= block.x && needle.x <= (block.x + block.width)
-    yInRange = needle.y <= (block.y + block.height)
+function shotHitBrick(brick){
+  let shotHitIndex = -1
+  for(let i=0; i < shots.length; i++){
+    const shot = shots[i]
+    xInRange = shot.x >= brick.x && shot.x <= (brick.x + brick.width)
+    yInRange = shot.y <= (brick.y + brick.height)
 
     if(xInRange && yInRange){
-      clearNeedle(needles[i])
-      needleHitIndex = i
+      clearShot(shots[i])
+      shotHitIndex = i
       break
     }
   }
 
-  if(needleHitIndex >= 0){    
-    needles.splice(needleHitIndex, 1)
+  if(shotHitIndex >= 0){    
+    shots.splice(shotHitIndex, 1)
     return true
   }
   return false
@@ -236,20 +241,20 @@ function redrawScreen(){
     return
 
   redrawAvatar()
-  redrawFallingBlocks()
-  redrawNeedles()
+  redrawbricks()
+  redrawShots()
 
   window.requestAnimationFrame(() => this.redrawScreen());
 }
 
 function redrawAvatar(){
-  clearBlock(avatar)
+  clearRect(avatar)
 
   avatar.x += avatarMoveDirection * avatarMoveIncrement
   avatar.x = Math.min(avatar.x, screenWidth - avatar.width) // not too far right
   avatar.x = Math.max(0, avatar.x) // not too far left
 
-  drawBlock(avatar)
+  drawRect(avatar)
 
   dipXIncrement = (avatar.width / 4) 
   dipY = avatar.y + (avatar.height / 3)
@@ -270,62 +275,62 @@ function redrawAvatar(){
   
 }
 
-function redrawFallingBlocks(){
-  const blocksToRemove = []
-  for(let i = 0; i < fallingBlocks.length; i++){
-    const block = fallingBlocks[i];
+function redrawbricks(){
+  const bricksToRemove = []
+  for(let i = 0; i < bricks.length; i++){
+    const brick = bricks[i];
 
-    if(blockHitAvatar(block)){
+    if(brickHitAvatar(brick)){
       endGame()
       return
     }
 
-    clearBlock(block);
+    clearRect(brick);
 
-    if(needleHitBlock(block)){
-      playSound(soundFiles.blockDestroyed)
-      const newScore = score + hitBlockPoints
+    if(shotHitBrick(brick)){
+      playSound(soundFiles.brickDestroyed)
+      const newScore = score + hitBrickPoints
       setScore(newScore)
-      blocksToRemove.push(i)
+      bricksToRemove.push(i)
     }
-    else if(block.y >= screenHeight){
-      playSound(soundFiles.blockGone)
-      const newScore = score + escapedBlockPoints
+    else if(brick.y >= screenHeight){
+      playSound(soundFiles.brickGone)
+      const newScore = score + escapedBrickPoints
       setScore(newScore)
-      blocksToRemove.push(i)
+      bricksToRemove.push(i)
     }
     else{
-      block.y += fallingBlockMoveIncrement
+      brick.y += brickMoveIncrement
     }
   }
 
-  // Remove Blocks
-  for(let i = 0; i < blocksToRemove.length; i ++){
-    fallingBlocks.splice(blocksToRemove[i], 1)
+  // Remove Bricks
+  for(let i = 0; i < bricksToRemove.length; i ++){
+    bricks.splice(bricksToRemove[i], 1)
   }
 
-  // Draw Blocks
-  for(let i = 0; i < fallingBlocks.length; i++){
-    drawBrick(fallingBlocks[i])
+  // Draw Bricks
+  for(let i = 0; i < bricks.length; i++){
+    drawBrick(bricks[i])
   }
 }
 
-function redrawNeedles(){
-  const needlesToRemove = []
-  for(let i=0; i < needles.length; i++){
-    const needle = needles[i]
-    clearNeedle(needle)
-    if(needle.y < 0){
-      needlesToRemove.push(i)
+function redrawShots(){
+  const shotsToRemove = []
+  for(let i=0; i < shots.length; i++){
+    const shot = shots[i]
+    clearShot(shot)
+    if(shot.y < 0){
+      shotsToRemove.push(i)
     }
     else{
-      needle.y -= needleMoveIncrement
-      drawNeedle(needle)
+      shot.y -= shotMoveIncrement
+      drawShot(shot)
     }    
   }
 
-  for(let i=0; i < needlesToRemove.length; i++){
-    needles.splice(needlesToRemove[i], 1)
+  for(let i=0; i < shotsToRemove.length; i++){
+    shots.splice(shotsToRemove[i], 1)
   }
 }
 
@@ -340,7 +345,7 @@ function setLevel(newLevel){
 }
 
 function playSound(filename){
-  var audio = new Audio(filename);
+  var audio = new Audio(soundFilePath + filename);
   audio.play();
 }
 
@@ -355,7 +360,7 @@ function keyDown(ev){
     case 'ArrowLeft':
       avatarMoveDirection = -1
       break
-    case ' ':
+    case 'Enter':
       if(!running)
         newGame()
       break
@@ -378,7 +383,7 @@ function keyUp(ev){
         avatarMoveDirection = 0;
       break
     case 'ArrowUp':
-      addNeedle()
+      addShot()
       break
     default:
       return

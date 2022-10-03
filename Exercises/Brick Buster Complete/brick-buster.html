@@ -3,33 +3,41 @@
 
 	<head>
 		<meta charset="utf-8" />
-		<title>Brick Dodger</title>
-		<meta name="description" content="Brick Dodger" />
+		<title>Brick Buster</title>
+		<meta name="description" content="Brick Buster" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<script src="brick-dodger.js"></script>
+		<script src="brick-buster.js"></script>
 	</head>
 
 	<body>
-		<h1>Brick Dodger</h1>
+		<h1>Brick Buster</h1>
 		<div>
 			Level: <span id="spLevel"></span> |
 			Score: <span id="spScore"></span>
 		</div>
 		<div class="game-container">
-			<div class="game-canvas">
-				<canvas id="playarea" width="450" height="450">
+			<div class="game-canvas-div">
+				<canvas class="game-canvas">
 					Canvas elements are required (2d context).
 				</canvas>
-			</div>			
+			</div>
+			<div class="game-info">
+				<p>
+					<strong>Left/Right arrows</strong> to dodge<br>
+					<strong>Up arrow</strong> to shoot<br>
+					<strong>Enter</strong> to start/restart
+				</p>
+				<p>
+					<strong>1 Point</strong> for every dodged brick<br>
+					<strong>3 Points</strong> for every busted brick<br>
+					New level every <strong><span id="levelLength"></span> seconds</strong>
+				</p>
+			</div>
 		</div>
-		<div>
-			Space Bar - Start New Game<br>
-			Left/Right - Move<br>
-			Up - Shoot Needle (maximum of 3 at a time)			
-		</div>
+		
 
 		<style>
-			canvas#playarea {
+			.game-canvas {
 				border: solid 0.3em;
 				border-color: #1561A9;
 				background-color: #87CEEB
@@ -48,7 +56,7 @@
 				margin: auto;
 			}
 
-			.game-canvas {
+			.game-canvas-div {
 				flex: 1;
 			}
 

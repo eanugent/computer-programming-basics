@@ -1,27 +1,23 @@
-canvas#playarea {
-  border: solid 0.3em;
-  border-color: yellow;
-}
-
 body {
-  background: #1E1F21;
-  color: #EEEFF1;
+  font-family: 'Courier New', Courier, monospace;
+  background-image: url("https://cdn.jsdelivr.net/gh/eanugent/computer-programming-basics@v0.1.2/assets/background.jpg");
+}
+.page {
+  margin: auto;
+  max-width: 1000px;
 }
 
-:link {
-  color: #BAD7FF;
-}
-
-:visited {
-  color: #F6BAFF;
+.game-canvas {
+  border: solid 2px;
+  border-color: #1561A9;
+  background-color: #87CEEB
 }
 
 .game-container {
   display: flex;
-  margin: auto;
 }
 
-.game-canvas {
+.game-canvas-div {
   flex: 1;
 }
 

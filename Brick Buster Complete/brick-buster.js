@@ -35,8 +35,8 @@ const soundFiles = {
 }
 
 const localFilePath = './'
-const remoteFilePath = 'https://github.com/eanugent/computer-programming-basics/raw/main/assets/'
-const soundFilePath = localFilePath // Change this to localFilePath to use your own files
+const remoteFilePath = 'https://cdn.jsdelivr.net/gh/eanugent/computer-programming-basics@v0.1.2/assets/'
+const soundFilePath = remoteFilePath // Change this to localFilePath to use your own files
 
 let context
 let gameBackgroundColor

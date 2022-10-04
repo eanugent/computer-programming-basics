@@ -8,8 +8,8 @@ const brickHoleSize = brickWidth / 16
 const avatarMoveIncrement = 5
 const avatarColor = '#FFD733'
 const avatar = {
-  x: null,
-  y: null,
+  x: 0,
+  y: 0,
   width: avatarWidth,
   height: avatarHeight,
   color: avatarColor
@@ -23,21 +23,29 @@ const shotHeight = 7
 const shotColor = 'black'
 const shotMoveIncrement = 5
 const maxShots = 3 // Maximum shots shot at a time
-const escapedBrickPoints = 1 // points earned when a brick falls to the ground
+const dodgedBrickPoints = 1 // points earned when a brick falls to the ground
 const hitBrickPoints = 3 // points earned when a shot hits a brick
 const levelLength = 10 // in seconds
 const soundFiles = {
   brickGone: 'brick_hit_ground.wav',
   shootShot: 'shot.wav',
-  brickDestroyed: 'beep.wav',
+  brickBusted: 'brick_busted.wav',
   levelUp: 'next_level.wav',
   gameOver: 'game_over.wav'
 }
-const soundFilePath = 'https://github.com/eanugent/computer-programming-basics/raw/main/assets/'
+
+const localFilePath = './'
+const remoteFilePath = 'https://github.com/eanugent/computer-programming-basics/raw/main/assets/'
+const soundFilePath = localFilePath // Change this to localFilePath to use your own files
 
 let context
 let gameBackgroundColor
-let avatarMoveDirection // -1 for left, 0 for not moving, 1 for right
+let avatarMoveDirection
+const moveDirections = {
+  left: -1, 
+  none: 0,
+  right: 1
+}
 let level = 1
 let brickInterval
 let levelInterval
@@ -51,8 +59,7 @@ function initialize(){
   canvas.setAttribute('width', screenWidth);
   canvas.setAttribute('height', screenHeight);
 
-  levelSpan = document.querySelector('#levelLength')
-  levelSpan.innerHTML = levelLength
+  document.querySelector('#levelLength').innerHTML =levelLength
   
   gameBackgroundColor = getComputedStyle(canvas)['background-color']
   
@@ -67,11 +74,12 @@ function newGame(){
   shots.length = 0
   avatar.x = 0
   avatar.y = screenHeight - avatar.height
-  avatarMoveDirection = 0
+  avatarMoveDirection = moveDirections.none
   setLevel(1)
   setScore(0)
   
   context.clearRect(0,0,screenWidth,screenHeight)
+
   running = true;
   redrawScreen();
   if(brickInterval)
@@ -108,8 +116,8 @@ function addbrick(){
 
   bricks.push(newBrick)
   let time = 1066 - (66 * level)
-  if(time < 100)
-    time = 100
+  time = Math.max(100, time)
+
   brickInterval = window.setTimeout(() => addbrick(), time)
 }
 
@@ -121,29 +129,30 @@ function addShot(){
     x: avatar.x + (brickWidth / 2),
     y: avatar.y,
     width: shotWidth,
-    height: shotHeight
+    height: shotHeight,
+    color: shotColor
   }
 
   shots.push(newShot)
   playSound(soundFiles.shootShot)
 }
 
-function clearRect(brick){
+function clearRect(rect){
   context.clearRect(
-    brick.x,
-    brick.y,
-    brick.width,
-    brick.height
+    rect.x,
+    rect.y,
+    rect.width,
+    rect.height
     )
 }
 
-function drawRect(brick){
-  context.fillStyle = brick.color
+function drawRect(rect){
+  context.fillStyle = rect.color
   context.fillRect(
-    brick.x,
-    brick.y,
-    brick.width,
-    brick.height
+    rect.x,
+    rect.y,
+    rect.width,
+    rect.height
   )
 }
 
@@ -179,33 +188,14 @@ function drawBrick(brick){
   drawCirlce(middleHole)
 }
 
-function drawTriangle(a, b, c, color){
+function drawTriangle(triangle){
   context.beginPath();
-  context.moveTo(a.x, a.y)
-  context.lineTo(b.x, b.y)
-  context.lineTo(c.x, c.y)
+  context.moveTo(triangle.a.x, triangle.a.y)
+  context.lineTo(triangle.b.x, triangle.b.y)
+  context.lineTo(triangle.c.x, triangle.c.y)
   context.closePath()
-  context.fillStyle = color
+  context.fillStyle = triangle.color
   context.fill()
-}
-
-function clearShot(shot){
-  context.clearRect(
-    shot.x,
-    shot.y,
-    shot.width,
-    shot.height
-  )
-}
-
-function drawShot(shot){
-  context.fillStyle = shotColor
-  context.fillRect(
-    shot.x,
-    shot.y,
-    shot.width,
-    shot.height
-  )
 }
 
 function brickHitAvatar(brick){
@@ -215,36 +205,28 @@ function brickHitAvatar(brick){
   return xInRange && yInRange
 }
 
-function shotHitBrick(brick){
-  let shotHitIndex = -1
+function shotIndexThatHitBrick(brick){
   for(let i=0; i < shots.length; i++){
     const shot = shots[i]
-    xInRange = shot.x >= brick.x && shot.x <= (brick.x + brick.width)
+    xInRange = shot.x >= (brick.x - shot.width) && shot.x <= (brick.x + brick.width)
     yInRange = shot.y <= (brick.y + brick.height)
 
     if(xInRange && yInRange){
-      clearShot(shots[i])
-      shotHitIndex = i
-      break
+      return i
     }
   }
 
-  if(shotHitIndex >= 0){    
-    shots.splice(shotHitIndex, 1)
-    return true
-  }
-  return false
+  return -1    
 }
 
 function redrawScreen(){
-  if(!running)
-    return
-
-  redrawAvatar()
-  redrawbricks()
-  redrawShots()
-
-  window.requestAnimationFrame(() => this.redrawScreen());
+  if(running){
+    redrawAvatar()
+    redrawBricks()
+    redrawShots()
+  
+    window.requestAnimationFrame(() => this.redrawScreen());  
+  }
 }
 
 function redrawAvatar(){
@@ -259,23 +241,25 @@ function redrawAvatar(){
   dipXIncrement = (avatar.width / 4) 
   dipY = avatar.y + (avatar.height / 3)
 
-  drawTriangle(
-    {x: avatar.x, y: avatar.y},
-    {x: avatar.x + dipXIncrement, y: dipY},
-    {x: avatar.x + (2*dipXIncrement), y: avatar.y},
-    gameBackgroundColor
-  )
+  leftTriangle = {
+    a: {x: avatar.x, y: avatar.y},
+    b: {x: avatar.x + dipXIncrement, y: dipY},
+    c: {x: avatar.x + (2*dipXIncrement), y: avatar.y},
+    color: gameBackgroundColor
+  }
 
-  drawTriangle(
-    {x: avatar.x + (2*dipXIncrement), y: avatar.y},
-    {x: avatar.x + (3*dipXIncrement), y: dipY},
-    {x: avatar.x + avatar.width, y: avatar.y},
-    gameBackgroundColor
-  )
-  
+  rightTriangle = {
+    a: {x: avatar.x + (2*dipXIncrement), y: avatar.y},
+    b: {x: avatar.x + (3*dipXIncrement), y: dipY},
+    c: {x: avatar.x + avatar.width, y: avatar.y},
+    color: gameBackgroundColor
+  }
+
+  drawTriangle(leftTriangle)
+  drawTriangle(rightTriangle)
 }
 
-function redrawbricks(){
+function redrawBricks(){
   const bricksToRemove = []
   for(let i = 0; i < bricks.length; i++){
     const brick = bricks[i];
@@ -287,16 +271,24 @@ function redrawbricks(){
 
     clearRect(brick);
 
-    if(shotHitBrick(brick)){
-      playSound(soundFiles.brickDestroyed)
+    shotHitBrickIndex = shotIndexThatHitBrick(brick)
+    if(shotHitBrickIndex > -1){
+      playSound(soundFiles.brickBusted)
+
+      clearRect(shots[shotHitBrickIndex])
+      shots.splice(shotHitBrickIndex, 1)
+
       const newScore = score + hitBrickPoints
       setScore(newScore)
+
       bricksToRemove.push(i)
     }
     else if(brick.y >= screenHeight){
       playSound(soundFiles.brickGone)
-      const newScore = score + escapedBrickPoints
+
+      const newScore = score + dodgedBrickPoints
       setScore(newScore)
+
       bricksToRemove.push(i)
     }
     else{
@@ -305,7 +297,7 @@ function redrawbricks(){
   }
 
   // Remove Bricks
-  for(let i = 0; i < bricksToRemove.length; i ++){
+  for(let i = 0; i < bricksToRemove.length; i++){
     bricks.splice(bricksToRemove[i], 1)
   }
 
@@ -319,13 +311,13 @@ function redrawShots(){
   const shotsToRemove = []
   for(let i=0; i < shots.length; i++){
     const shot = shots[i]
-    clearShot(shot)
+    clearRect(shot)
     if(shot.y < 0){
       shotsToRemove.push(i)
     }
     else{
       shot.y -= shotMoveIncrement
-      drawShot(shot)
+      drawRect(shot)
     }    
   }
 
@@ -355,10 +347,10 @@ function keyDown(ev){
   
   switch(ev.key){
     case 'ArrowRight':
-      avatarMoveDirection = 1
+      avatarMoveDirection = moveDirections.right
       break
     case 'ArrowLeft':
-      avatarMoveDirection = -1
+      avatarMoveDirection = moveDirections.left
       break
     case 'Enter':
       if(!running)
@@ -375,12 +367,12 @@ function keyUp(ev){
   
   switch(ev.key){
     case 'ArrowRight':
-      if(avatarMoveDirection == 1)
-        avatarMoveDirection = 0;
+      if(avatarMoveDirection == moveDirections.right)
+        avatarMoveDirection = moveDirections.none;
       break
     case 'ArrowLeft':
-      if(avatarMoveDirection == -1)
-        avatarMoveDirection = 0;
+      if(avatarMoveDirection == moveDirections.left)
+        avatarMoveDirection = moveDirections.none;
       break
     case 'ArrowUp':
       addShot()

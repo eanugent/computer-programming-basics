@@ -74,7 +74,7 @@ window.onload = async function(){
 
   document.addEventListener('keydown', async (e) =>{
     if(running) return
-    if(e.key == ' '){
+    if(e.key == 'Enter'){
       running = true
       context.clearRect(0,0,450,450)
       drawTargetBlocks()

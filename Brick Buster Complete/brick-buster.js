@@ -374,7 +374,7 @@ function keyUp(ev){
       if(avatarMoveDirection == moveDirections.left)
         avatarMoveDirection = moveDirections.none;
       break
-    case 'ArrowUp':
+    case ' ':
       addShot()
       break
     default:

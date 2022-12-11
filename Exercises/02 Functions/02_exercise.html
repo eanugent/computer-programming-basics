@@ -1,57 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 
-	<head>
-		<meta charset="utf-8" />
-		<title>Fun Blocks</title>
-		<meta name="description" content="Fun Blocks" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<script src="fun-blocks.js"></script>
-	</head>
+<head>
+  <meta charset="utf-8" />
+  <title>CPB-02 Functions</title>
+  <link rel="stylesheet" href="support/02_exercise_support.css">
+  <script src="support/02_exercise_support.js"></script>
+  <script src="02_exercise.js"></script>
+</head>
 
-	<body>
-		<h1>Fun Blocks</h1>
-		<div class="game-container">
-			<div class="game-canvas">
-				<canvas id="playarea" width="450" height="450">
-					Canvas elements are required (2d context).
-				</canvas>
-			</div>			
-		</div>
-
-		<style>
-			canvas#playarea {
-				border: solid 0.3em;
-				border-color: yellow;
-			}
-
-			body {
-				background: #1E1F21;
-				color: #EEEFF1;
-			}
-
-			:link {
-				color: #BAD7FF;
-			}
-
-			:visited {
-				color: #F6BAFF;
-			}
-
-			.game-container {
-				display: flex;
-				margin: auto;
-			}
-
-			.game-canvas {
-				flex: 1;
-			}
-
-			.game-info {
-				flex: 2;
-				margin-left: 15px;
-			}
-		</style>
-	</body>
+<body>
+  <div class="page">
+    <h1>CPB-02 Functions</h1>
+    <h2>Press enter/return to start</h2>
+    <div class="game-container">
+      <div class="game-canvas">
+        <canvas id="playarea">
+        </canvas>
+      </div>
+      <div class="game-info">
+        <h3>Instructions</h3>
+        <ol>
+          <li>
+            Create the following functions: moveAvatarRight, moveAvatarUp, and moveAvatarDown.
+          </li>
+          <li>
+            Replace the moveAvatar commands with the appropriate newly created function (moveAvatarRight will not be
+            used).
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</body>
 
 </html>

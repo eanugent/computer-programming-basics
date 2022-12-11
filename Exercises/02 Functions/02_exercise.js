@@ -3,11 +3,11 @@ async function run(){
   await sleep(1000)
   
   changeAvatarColor('red')
-  moveAvatarDown(200)
+  moveAvatar('y', 200)
   await sleep(1000)
   
   changeAvatarColor('yellow')
-  moveAvatarLeft(50) // replaced moveAvatar('x', -50)
+  moveAvatarLeft(50)
   moveAvatar('y', -100)
   await sleep(1000)
   

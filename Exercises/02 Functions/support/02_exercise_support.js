@@ -2,9 +2,12 @@ let context
 let currentX = -1
 let currentY = -1
 let avatarColor = 'blue'
+let running = false
 
 function initialize(){
   let canvas = document.querySelector('#playarea')
+  canvas.setAttribute('width', '450');
+  canvas.setAttribute('height', '450');
   context = canvas.getContext('2d')
   drawTargetBlocks()
 }

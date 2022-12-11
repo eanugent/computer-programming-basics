@@ -1,28 +1,3 @@
-async function run(){
-  drawAvatar(200,50)
-  await sleep(1000)
-  
-  changeAvatarColor('red')
-  moveAvatarDown(200)
-  await sleep(1000)
-  
-  changeAvatarColor('yellow')
-  moveAvatarLeft(50) // replaced moveAvatar('x', -50)
-  moveAvatar('y', -100)
-  await sleep(1000)
-  
-  changeAvatarColor('green')
-  moveAvatar('x', -100)
-  moveAvatar('y', -100)
-}
-
-function moveAvatarLeft(spaces){
-  moveAvatar('x', -1 * spaces)
-}
-
-/***********************************************
- * Supporting Functions - MODIFY WITH CAUTION
- ************************************************/
 let context
 let currentX = -1
 let currentY = -1
@@ -94,5 +69,14 @@ function sleep(ms){
 
 window.onload = async function(){
   initialize()
-  await run()
+  document.addEventListener('keydown', async (e) =>{
+    if(running) return
+    if(e.key == 'Enter'){
+      running = true
+      context.clearRect(0,0,450,450)
+      drawTargetBlocks()
+      await run()
+      running = false
+    }
+  })
 }

@@ -1,56 +1,12 @@
-let avatarColor
-
-async function run(){
-  let defaultSleepTime = 1000
-  let color1 = 'red'
-  let color2 = 'yellow'
-  let color3 = 'green'
-
-  avatarColor = 'gray'
-
-  drawAvatar(200,50)
-  await sleep(defaultSleepTime)
-  
-  changeAvatarColor(color1)
-  moveAvatarDown(200)
-  await sleep(defaultSleepTime)
-
-  changeAvatarColor(color2)
-  moveAvatarLeft(50)
-  moveAvatarUp(100)
-  await sleep(defaultSleepTime)
-
-  changeAvatarColor(color3)
-  moveAvatarLeft(100)
-  moveAvatarUp(100)
-  await sleep(defaultSleepTime)
-}
-
-function moveAvatarLeft(spaces){
-  moveAvatar('x', -1 * spaces)
-}
-
-function moveAvatarRight(spaces){
-  moveAvatar('x', spaces)
-}
-
-function moveAvatarUp(spaces){
-  moveAvatar('y', -1 * spaces)
-}
-
-function moveAvatarDown(spaces){
-  moveAvatar('y', spaces)
-}
-
-/***********************************************
- * Supporting Functions - MODIFY WITH CAUTION
- ************************************************/
 let context
 let currentX = -1
 let currentY = -1
+let running = false
 
 function initialize(){
   let canvas = document.querySelector('#playarea')
+  canvas.setAttribute('width', '450');
+  canvas.setAttribute('height', '450');
   context = canvas.getContext('2d')
   drawTargetBlocks()
 }
@@ -115,5 +71,14 @@ function sleep(ms){
 
 window.onload = async function(){
   initialize()
-  await run()
+  document.addEventListener('keydown', async (e) =>{
+    if(running) return
+    if(e.key == 'Enter'){
+      running = true
+      context.clearRect(0,0,450,450)
+      drawTargetBlocks()
+      await run()
+      running = false
+    }
+  })
 }

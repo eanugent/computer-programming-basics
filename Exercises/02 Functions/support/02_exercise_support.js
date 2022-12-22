@@ -1,7 +1,7 @@
 let context
-let currentX = -1
-let currentY = -1
-let avatarColor = 'blue'
+let currentX
+let currentY
+let avatarColor
 let running = false
 
 function initialize(){
@@ -9,7 +9,6 @@ function initialize(){
   canvas.setAttribute('width', '450');
   canvas.setAttribute('height', '450');
   context = canvas.getContext('2d')
-  drawTargetBlocks()
 }
 
 function drawTargetBlocks(){
@@ -77,6 +76,9 @@ window.onload = async function(){
     if(e.key == 'Enter'){
       running = true
       context.clearRect(0,0,450,450)
+      currentX = -1
+      currentY = -1
+      avatarColor = 'blue'
       drawTargetBlocks()
       await run()
       running = false

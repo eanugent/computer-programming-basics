@@ -1,0 +1,32 @@
+body {
+  font-family: 'Courier New', Courier, monospace;
+  background-image: url("https://cdn.jsdelivr.net/gh/eanugent/computer-programming-basics@v0.1.2/assets/background.jpg");
+}
+.page {
+  margin: auto;
+  max-width: 1000px;
+}
+
+.game-canvas {
+  border: solid 2px;
+  border-color: #1561A9;
+  background-color: #87CEEB
+}
+
+.game-container {
+  display: flex;
+}
+
+.game-canvas-div {
+  flex: 1;
+}
+
+.game-info {
+  flex: 2;
+  margin-left: 15px;
+}
+
+.code-symbol {
+  color: #809bbd;
+  font-weight: bold;
+}

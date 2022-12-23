@@ -1,7 +1,4 @@
 let context
-let currentX
-let currentY
-let avatarColor
 let running = false
 
 function initialize(){
@@ -26,40 +23,31 @@ function drawTargetBlocks(){
   )
 }
 
-function changeAvatarColor(color){
-  avatarColor = color
-  drawAvatar()
+function clearAvatar(){
+  if(getAvatarX() >= 0 && getAvatarY() >= 0)
+    context.clearRect(getAvatarX(), getAvatarY(), 50, 50)
 }
 
-function drawAvatar(x = null, y = null){
+function drawAvatar(){
   clearAvatar()
-  if(x !==null)
-    currentX = x
-  if(y !==null)
-    currentY = y
 
-  context.fillStyle = avatarColor
+  context.fillStyle = getAvatarColor()
   context.fillRect(
-    currentX,
-    currentY,
+    getAvatarX(),
+    getAvatarY(),
     50,
     50
   )
-}
-
-function clearAvatar(){
-  if(currentX >= 0 && currentY >= 0)
-    context.clearRect(currentX, currentY, 50, 50)
 }
 
 function moveAvatar(axis, spaces){
   clearAvatar()
 
   if(axis == "x"){
-    currentX += spaces
+    setAvatarX(getAvatarX() + spaces)
   }
   else if(axis == "y"){
-    currentY += spaces
+    setAvatarY(getAvatarY() + spaces)
   }
 
   drawAvatar()
@@ -76,9 +64,6 @@ window.onload = async function(){
     if(e.key == 'Enter'){
       running = true
       context.clearRect(0,0,450,450)
-      currentX = -1
-      currentY = -1
-      avatarColor = 'blue'
       drawTargetBlocks()
       await run()
       running = false

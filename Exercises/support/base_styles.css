@@ -25,3 +25,12 @@ body {
   flex: 2;
   margin-left: 15px;
 }
+
+.code-symbol {
+  color: #809bbd;
+  font-weight: bold;
+}
+
+.table-of-contents li {
+  margin-bottom: 10px;
+}

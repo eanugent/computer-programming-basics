@@ -1,11 +1,11 @@
 let avatar
-let blocks
 
 async function run(){
   let defaultSleepTime = 1000
-  let color1 = 'red'
-  let color2 = 'yellow'
-  let color3 = 'green'
+  const colors = []
+  colors.push('red')
+  colors.push('yellow')
+  colors.push('green')
 
   avatar = {
     x: 200,
@@ -17,16 +17,16 @@ async function run(){
   drawAvatar()
   await sleep(defaultSleepTime)
   
-  changeAvatarColor(color1)
+  changeAvatarColor(colors[0])
   moveAvatarDown(200)
   await sleep(defaultSleepTime)
 
-  changeAvatarColor(color2)
+  changeAvatarColor(colors[1])
   moveAvatarLeft(50)
   moveAvatarUp(100)
   await sleep(defaultSleepTime)
 
-  changeAvatarColor(color3)
+  changeAvatarColor(colors[2])
   moveAvatarLeft(100)
   moveAvatarUp(100)
   await sleep(defaultSleepTime)
@@ -74,7 +74,7 @@ function getAvatarColor(){
 }
 
 function drawTargetBlocks(){
-  blocks = []
+  let blocks = []
   blocks.push({ x: 50, y: 50 })
   blocks.push({ x: 150, y: 150 })
   blocks.push({ x: 200, y: 250 })

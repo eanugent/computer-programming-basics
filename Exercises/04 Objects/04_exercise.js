@@ -8,10 +8,10 @@ async function run(){
   let color2 = 'yellow'
   let color3 = 'green'
 
-  avatarColor = 'gray'
-
   avatarX = 200
   avatarY = 50
+  avatarColor = 'gray'
+
   drawAvatar()
   await sleep(defaultSleepTime)
   

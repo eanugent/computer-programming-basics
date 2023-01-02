@@ -1,5 +1,4 @@
 let avatar
-let blocks
 
 async function run(){
   let defaultSleepTime = 1000

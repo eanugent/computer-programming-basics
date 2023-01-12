@@ -7,11 +7,11 @@ async function run(){
   await sleep(1000)
   
   changeAvatarColor('yellow')
-  moveAvatar('x', -100)
-  moveAvatar('y', -150)
+  moveAvatar('x', -50)
+  moveAvatar('y', -100)
   await sleep(1000)
   
   changeAvatarColor('green')
-  moveAvatar('x', -50)
-  moveAvatar('y', -50)
+  moveAvatar('x', -100)
+  moveAvatar('y', -100)
 }

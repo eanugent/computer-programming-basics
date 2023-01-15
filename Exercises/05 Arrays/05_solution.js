@@ -1,4 +1,5 @@
 let avatar
+const blocks = []
 
 async function run(){
   let defaultSleepTime = 1000
@@ -74,7 +75,6 @@ function getAvatarColor(){
 }
 
 function drawTargetBlocks(){
-  let blocks = []
   blocks.push({ x: 50, y: 50 })
   blocks.push({ x: 150, y: 150 })
   blocks.push({ x: 200, y: 250 })

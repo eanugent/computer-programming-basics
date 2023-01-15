@@ -1,22 +1,19 @@
 let context
+let running = false
+const blockWidth = 50
+const blockHeight = 50
 
 function initialize(){
   let canvas = document.querySelector('#playarea')
   canvas.setAttribute('width', '450')
   canvas.setAttribute('height', '450')
   context = canvas.getContext('2d')
-
-  document.addEventListener('keydown', async (e) => {
-    if(e.key == ' '){
-      await run()
-    }
-  });
 }
 
 function drawBlock(block){
   context.fillStyle = 'purple'
   context.fillRect(
-    block.x, block.y, 50, 50
+    block.x, block.y, blockWidth, blockHeight
   )
 }
 
@@ -35,12 +32,11 @@ function avatarHitAnyBlock(){
 }
 
 function blockHitAvatar(block){
-  const xInRange = block.x >= (avatar.x - block.width) && block.x <= (avatar.x + block.width)
-  const yInRange = block.y >= (avatar.y - block.height) && block.y <= (avatar.y + block.height)
+  const xInRange = block.x >= (avatar.x - blockWidth) && block.x <= (avatar.x + blockWidth)
+  const yInRange = block.y >= (avatar.y - blockHeight) && block.y <= (avatar.y + blockHeight)
 
   return xInRange && yInRange
 }
-
 
 function playSound(filename){
   var audio = new Audio(filename);
@@ -70,4 +66,14 @@ function sleep(ms){
 
 window.onload = async function(){
   initialize()
+  document.addEventListener('keydown', async (e) =>{
+    if(running) return
+    if(e.key == 'Enter'){
+      running = true
+      context.clearRect(0,0,450,450)
+      if(typeof blocks !== 'undefined') blocks.length = 0
+      await run()
+      running = false
+    }
+  })
 }

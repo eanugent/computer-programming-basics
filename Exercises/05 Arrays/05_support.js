@@ -62,7 +62,7 @@ window.onload = async function(){
     if(e.key == 'Enter'){
       running = true
       context.clearRect(0,0,450,450)
-      drawTargetBlocks()
+      if(typeof blocks !== 'undefined') blocks.length = 0
       await run()
       running = false
     }

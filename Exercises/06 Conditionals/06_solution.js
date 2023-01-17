@@ -86,13 +86,20 @@ function moveAvatar(axis, spaces){
   clearAvatar()
 
   if(axis === 'x'){
-    avatar.x = avatar.x + spaces
+    let newX = avatar.x + spaces
+    setAvatarX(newX)
   }
   else if(axis === 'y'){
-    avatar.y = avatar.y + spaces
+    let newY = (avatar.y + spaces)
+    setAvatarY(newY)
+  }
+  else {
+    throw 'axis is an invalid value'
   }
 
-  if(avatarHitAnyBlock()){
+  let hitBlockIndex = indexOfBlockHitByAvatar()
+  if(hitBlockIndex > -1){
+    clearBlock(hitBlockIndex)
     playSound('beep.wav')
   }
 

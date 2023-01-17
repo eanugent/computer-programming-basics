@@ -10,6 +10,11 @@ function initialize(){
   context = canvas.getContext('2d')
 }
 
+function clearBlock(blockIndex){
+  context.clearRect(blocks[blockIndex].x, blocks[blockIndex].y, blockWidth, blockHeight)
+  blocks.splice(blockIndex, 1)
+}
+
 function drawBlock(block){
   context.fillStyle = 'purple'
   context.fillRect(
@@ -23,12 +28,12 @@ function drawBlocks(blocks){
   }
 }
 
-function avatarHitAnyBlock(){
+function indexOfBlockHitByAvatar(){
   for(let i=0; i < blocks.length; i++){
     if(blockHitAvatar(blocks[i]))
-      return true
+      return i
   }
-  return false
+  return -1
 }
 
 function blockHitAvatar(block){

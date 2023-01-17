@@ -85,15 +85,7 @@ function drawTargetBlocks(){
 function moveAvatar(axis, spaces){
   clearAvatar()
 
-  /*
-    Update avatar.x or avatar.y
-  */
-
-  /*
-    Bonus:
-    Use playSound('beep.wav') to make
-    a sound if avatarHitAnyBlock() is true
-  */
+  
 
   drawAvatar()
 }

@@ -5,6 +5,10 @@ let avatar = {
 }
 let blocks
 
+function initialize(){
+  
+}
+
 function moveAvatarLeft(spaces){
   moveAvatar('x', -1 * spaces)
 }

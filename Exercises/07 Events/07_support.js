@@ -38,9 +38,8 @@ function blockHitAvatar(block){
   return xInRange && yInRange
 }
 
-
 function playSound(filename){
-  var audio = new Audio(filename);
+  var audio = new Audio(soundFilePath + filename);
   audio.play();
 }
 

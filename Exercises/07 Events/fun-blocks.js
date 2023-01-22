@@ -75,8 +75,8 @@ function moveAvatar(axis, spaces){
   drawAvatar()
 }
 
-function keyDownHandler(key){
-  console.log(key)
+function keyDownHandler(eventInfo){
+  console.log(eventInfo.key)
 }
 
 /***********************************************
@@ -88,9 +88,7 @@ function initialize(){
   let canvas = document.querySelector('#playarea')
   context = canvas.getContext('2d')
 
-  document.addEventListener('keydown', async (e) => {
-      keyDownHandler(e.key)
-  }); 
+  document.addEventListener('keydown', keyDownHandler) 
 }
 
 function drawBlock(block){

@@ -6,7 +6,7 @@ let avatar = {
 let blocks
 
 function initialize(){
-
+  document.addEventListener('keydown', keyDownHandler)
 }
 
 function moveAvatarLeft(spaces){
@@ -50,6 +50,11 @@ function getAvatarColor(){
   return avatar.color
 }
 
+function drawBlocks(blocks){
+
+
+}
+
 function drawTargetBlocks(){
   blocks = []
   blocks.push({ x: 50, y: 50 })
@@ -81,4 +86,17 @@ function moveAvatar(axis, spaces){
   }
 
   drawAvatar()
+}
+
+function keyDownHandler(eventInfo){
+  let spacesToMove = 10
+  if(eventInfo.key === "ArrowLeft"){
+    moveAvatarLeft(spacesToMove)
+  } else if(eventInfo.key === "ArrowRight"){
+    moveAvatarRight(spacesToMove)
+  } else if(eventInfo.key === "ArrowUp"){
+    moveAvatarUp(spacesToMove)
+  } else if(eventInfo.key === "ArrowDown"){
+    moveAvatarDown(spacesToMove)
+  }
 }

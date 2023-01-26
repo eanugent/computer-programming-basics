@@ -43,10 +43,10 @@ function drawAvatar(){
 function moveAvatar(axis, spaces){
   clearAvatar()
 
-  if(axis == "x"){
+  if(axis == 'x'){
     setAvatarX(getAvatarX() + spaces)
   }
-  else if(axis == "y"){
+  else if(axis == 'y'){
     setAvatarY(getAvatarY() + spaces)
   }
 

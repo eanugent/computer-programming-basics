@@ -54,10 +54,10 @@ function clearAvatar(){
 function moveAvatar(axis, spaces){
   clearAvatar()
 
-  if(axis == "x"){
+  if(axis == 'x'){
     currentX += spaces
   }
-  else if(axis == "y"){
+  else if(axis == 'y'){
     currentY += spaces
   }
 

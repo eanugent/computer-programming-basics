@@ -91,13 +91,13 @@ function moveAvatar(axis, spaces){
 
 function keyDownHandler(eventInfo){
   let spacesToMove = 10
-  if(eventInfo.key === "ArrowLeft"){
+  if(eventInfo.key === 'ArrowLeft'){
     moveAvatarLeft(spacesToMove)
-  } else if(eventInfo.key === "ArrowRight"){
+  } else if(eventInfo.key === 'ArrowRight'){
     moveAvatarRight(spacesToMove)
-  } else if(eventInfo.key === "ArrowUp"){
+  } else if(eventInfo.key === 'ArrowUp'){
     moveAvatarUp(spacesToMove)
-  } else if(eventInfo.key === "ArrowDown"){
+  } else if(eventInfo.key === 'ArrowDown'){
     moveAvatarDown(spacesToMove)
   }
 }

@@ -23,19 +23,73 @@
       </div>
       <div class="game-info">
         <p>
-          Arrays ...
+          Arrays allow us to store a collection of items in a single structure. In this exercise we will be storing
+          the colors and the target blocks in an array. This is a reorganization exercise so the program
+          should run the same before and after our changes.
         </p>
         <h3>Instructions</h3>
         <ol>
           <li>
-            ...
+            Inside of the <span class="code-symbol">run</span> function, declare an array named <span class="code-symbol">colors</span>.
+          </li>
+          <li>
+            After the array declaration, use the <span class="code-symbol">push</span> function
+            to add the 3 colors that were being stored in the <span class="code-symbol">color1</span>,
+            <span class="code-symbol">color2</span>, and <span class="code-symbol">color3</span> variables
+            to the array.
+          </li>
+          <li>
+            Remove the <span class="code-symbol">color1</span>, <span class="code-symbol">color2</span>,
+            and <span class="code-symbol">color3</span> variables declarations
+          </li>
+          <li>
+            Change the <span class="code-symbol">color1</span>, <span class="code-symbol">color2</span>,
+            and <span class="code-symbol">color3</span> references in the <span class="code-symbol">changeAvatarColor</span>
+            function calls to reference the elements of the array instead.
+          </li>
+          <li>
+            Declare a global array named <span class="code-symbol">blocks</span>.
+          </li>
+          <li>
+            Inside of the <span class="code-symbol">drawTargetBlocks</span> function, instead of 
+            declaring 3 variables, push the block objects into the <span class="code-symbol">blocks</span>
+            array.
+          </li>
+          <li>
+            Replace the 3 <span class="code-symbol">drawBlock</span> (singular) function calls with a single 
+            call to the <span class="code-symbol">drawBlocks</span> (plural) function passing the
+            <span class="code-symbol">blocks</span> array as the parameter.
           </li>
         </ol>
 				<h3>Notes</h3>
 				<ul>          
 					<li>
-						...
-					</li>					
+						An array can be declared using the following syntax:
+            <p class="code-symbol left-indent">
+              const myArray = []
+            </p>
+					</li>
+          <li>
+            Items can be added to an array using the <span class="code-symbol">push</span> function:
+            <p class="code-symbol left-indent">
+              stringArray.push('String to add')
+              objectArray.push({ propX: 100, propY: 200})
+            </p>
+          </li>
+          <li>
+            Elements in an array can be accessed by putting the index of the desired element in
+            square brackets after the name of the array. The index of the first element is 0. So, to get the 
+            3rd element from myArray we use the following:
+            <p class="code-symbol left-indent">
+              myArray[2]
+            </p>
+          </li>
+          <li>
+            For more information on Arrays in Javascript, see the
+            <a href="https://www.w3schools.com/js/js_arrays.asp" target="_blank">
+              W3 Schools reference.
+            </a>
+          </li>
 				</ul>
       </div>
     </div>

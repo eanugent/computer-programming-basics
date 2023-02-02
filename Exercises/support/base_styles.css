@@ -34,3 +34,7 @@ body {
 .table-of-contents li {
   margin-bottom: 10px;
 }
+
+.left-indent {
+  margin-left: 15px
+}

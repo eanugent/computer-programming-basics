@@ -63,11 +63,11 @@ function moveAvatar(axis, spaces){
   clearAvatar()
 
   if(axis === 'x'){
-    let newX = avatar.x + spaces
+    let newX = getAvatarX() + spaces
     setAvatarX(newX)
   }
   else if(axis === 'y'){
-    let newY = (avatar.y + spaces)
+    let newY = getAvatarY() + spaces
     setAvatarY(newY)
   }
   else {

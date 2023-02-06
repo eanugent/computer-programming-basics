@@ -7,13 +7,22 @@ const brickHeight = 25
 const brickHoleSize = brickWidth / 16
 const avatarMoveIncrement = 5
 const avatarColor = '#FFD733'
+
+const moveDirections = {
+  left: -1, 
+  none: 0,
+  right: 1
+}
+
 const avatar = {
   x: 0,
   y: 0,
   width: avatarWidth,
   height: avatarHeight,
-  color: avatarColor
+  color: avatarColor,
+  moveDirections: moveDirections.none
 }
+
 const brickMoveIncrement = 5
 const bricks = []
 const brickColor = '#ca6843'
@@ -35,17 +44,11 @@ const soundFiles = {
 }
 
 const localFilePath = './'
-const remoteFilePath = 'https://cdn.jsdelivr.net/gh/eanugent/computer-programming-basics@v0.1.2/assets/'
+const remoteFilePath = 'https://cdn.jsdelivr.net/gh/eanugent/computer-programming-basics@v0.2.1/assets/'
 const soundFilePath = remoteFilePath // Change this to localFilePath to use your own files
 
 let context
 let gameBackgroundColor
-let avatarMoveDirection
-const moveDirections = {
-  left: -1, 
-  none: 0,
-  right: 1
-}
 let level = 1
 let brickInterval
 let levelInterval
@@ -74,7 +77,7 @@ function newGame(){
   shots.length = 0
   avatar.x = 0
   avatar.y = screenHeight - avatar.height
-  avatarMoveDirection = moveDirections.none
+  avatar.moveDirection = moveDirections.none
   setLevel(1)
   setScore(0)
   
@@ -232,7 +235,7 @@ function redrawScreen(){
 function redrawAvatar(){
   clearRect(avatar)
 
-  avatar.x += avatarMoveDirection * avatarMoveIncrement
+  avatar.x += avatar.moveDirection * avatarMoveIncrement
   avatar.x = Math.min(avatar.x, screenWidth - avatar.width) // not too far right
   avatar.x = Math.max(0, avatar.x) // not too far left
 
@@ -347,10 +350,10 @@ function keyDown(ev){
   
   switch(ev.key){
     case 'ArrowRight':
-      avatarMoveDirection = moveDirections.right
+      avatar.moveDirection = moveDirections.right
       break
     case 'ArrowLeft':
-      avatarMoveDirection = moveDirections.left
+      avatar.moveDirection = moveDirections.left
       break
     case 'Enter':
       if(!running)
@@ -367,12 +370,12 @@ function keyUp(ev){
   
   switch(ev.key){
     case 'ArrowRight':
-      if(avatarMoveDirection == moveDirections.right)
-        avatarMoveDirection = moveDirections.none;
+      if(avatar.moveDirection == moveDirections.right)
+        avatar.moveDirection = moveDirections.none;
       break
     case 'ArrowLeft':
-      if(avatarMoveDirection == moveDirections.left)
-        avatarMoveDirection = moveDirections.none;
+      if(avatar.moveDirection == moveDirections.left)
+        avatar.moveDirection = moveDirections.none;
       break
     case ' ':
       addShot()

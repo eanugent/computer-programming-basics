@@ -23,22 +23,81 @@
       </div>
       <div class="game-info">
         <p>
-          Conditional statements are used to execute given instructions only
+          Conditional statements are used to execute a block of code only
           when certain conditions are true. In this exercise we will be implementing
           the <span class="code-symbol">moveAvatar</span> function which moves the
           avatar to a different location on the screen based on the parameters given.
         </p>
         <h3>Instructions</h3>
-        <ol>
+        <ol class="instructions">
           <li>
-            ...
+            Add conditional statements (with empty code blocks for now) to be executed in the
+            following cases:
+            <ul class="left-indent">
+              <li>When the value of <span class="code-symbol">axis</span> is 'x'</li>
+              <li>When the value of <span class="code-symbol">axis</span> is 'y'</li>
+              <li>When the value of <span class="code-symbol">axis</span> is neither 'x' nor 'y'</li>
+            </ul>
+            (see the first note below)
+          </li>
+          <li>
+            In the block that executes when <span class="code-symbol">axis</span>
+            is 'x', create a <span class="code-symbol">newX</span> variable whose value is
+            the return value of the <span class="code-symbol">getAvatarX()</span> function plus
+            the value of the <span class="code-symbol">spaces</span> parameter.
+          </li>
+          <li>
+            After your declaration of the <span class="code-symbol">newX</span> variable,
+            call the <span class="code-symbol">setAvatarX</span> function with 
+            <span class="code-symbol">newX</span> as its parameter.
+          </li>
+          <li>
+            Use the previous two instructions to complete the block that executes
+            when the <span class="code-symbol">axis</span> is 'y' (changing X to Y as appropriate).
+          </li>
+          <li>
+            In the block that executes when <span class="code-symbol">axis</span> is
+            neither 'x' nor 'y', report an error using the following line of code:
+            <p class="left-indent code-symbol">
+              throw 'axis is an invalid value'
+            </p>
+          </li>
+          <li>
+            After the previously-defined conditional blocks, declare a variable
+            named <span class="code-symbol">hitBlockIndex</span> and set its value
+            to the return value of the <span class="code-symbol">indexOfBlockHitByAvatar()</span>
+            function.
+          </li>
+          <li>
+            Add a conditional statement (with an empty code block for now) that will
+            execute its code block if the value of <span class="code-symbol">hitBlockIndex</span>
+            is greater than -1.
+          </li>
+          <li>
+            In the code block, call the <span class="code-symbol">clearBlock</span>
+            function passing <span class="code-symbol">hitBlockIndex</span> as its parameter.
+          </li>
+          <li>
+            Also in this code block, call the <span class="code-symbol">playSound</span>
+            function passing 'beep.wav' as its parameter.
           </li>
         </ol>
 				<h3>Notes</h3>
 				<ul>          
 					<li>
-						...
-					</li>					
+						In Javascript, to test if a value is equal to another value, we use 
+            3 equal signs as in the following:
+            <div class="code-symbol left-indent" style="white-space: pre-line;">
+              if(myVariable === 'this value'){
+
+              }
+            </div>
+					</li>
+          <li>
+            For more information on Conditional Statements in Javascript, see the
+            <a href="https://www.w3schools.com/js/js_if_else.asp" target="_blank">
+              W3 schools reference</a>.
+          </li>
 				</ul>
       </div>
     </div>

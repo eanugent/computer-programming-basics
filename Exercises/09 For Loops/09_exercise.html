@@ -22,19 +22,52 @@
       </div>
       <div class="game-info">
         <p>
-          For Loops
+          For Loops can simplify code that uses a While Loop in some scenarios. In this
+            exercise we will refactor (see note below) the
+            <span class="code-symbol">drawBlocks</span> function using a For Loop.
         </p>
         <h3>Instructions</h3>
         <ol>
           <li>
-            ...
+            Replace the code in the <span class="code-symbol">drawBlocks</span>
+            function with a <span class="code-symbol">for</span> loop.
           </li>
         </ol>
 				<h3>Notes</h3>
-				<ul>          
+				<ul>
 					<li>
-						...
-					</li>					
+						Refactoring is the process of restructuring code without changing 
+            its overall function.
+					</li>
+          <li>
+            A for loop consists of 3 expressions:
+            <p class="left-indent" style="white-space:pre-line">
+              for(BEFORE; WHILE; AFTER){
+
+              }
+            </p>
+            <ul style="margin-left:-15px;">
+              <li>
+                BEFORE: Executed before the block in the loop. Usually a declaration and initialization of the
+                "iteration variable". For example:
+                <span class="code-symbol">let index = 0</span>
+              </li>
+              <li>
+                WHILE: The conditional statement that determines how long the block will be repeated.
+                Usually a less-than expression with the iteration variable on the left. For example:
+                <span class="code-symbol">index < myArray.length</span>
+              </li>
+              <li>
+                AFTER: Executed after each iteration of the loop. Usually incrementing
+                the iteration variable. For example: <span class="code-symbol">index++</span>
+              </li>
+            </ul>
+          </li>
+          <li>
+            For more information on While Loops in Javascript, see the
+            <a href="https://www.w3schools.com/js/js_loop_for.asp" target="_blank">
+              W3 Schools reference</a>.
+          </li>
 				</ul>
       </div>
     </div>

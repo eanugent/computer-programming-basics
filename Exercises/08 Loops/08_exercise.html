@@ -22,19 +22,53 @@
       </div>
       <div class="game-info">
         <p>
-          Loops ...
+          Loops allow us to repeatedly execute a block of code as long as
+          a certain condition is true. In this exercise, we will use a
+          <span class="code-symbol">while</span> loop to implement
+          the <span class="code-symbol">drawBlocks</span> function.
         </p>
         <h3>Instructions</h3>
         <ol>
           <li>
-            ...
+            In the <span class="code-symbol">drawBlocks</span> function (line
+            53), create a variable named <span class="code-symbol">index</span>
+            and initialize it to a value of 0.
+          </li>
+          <li>
+            After the variable declaration, add a <span class="code-symbol">while</span>
+            loop that will execute as long as the value of <span class="code-symbol">index</span>
+            is less than the <span class="code-symbol">length</span> property of
+            the <span class="code-symbol">blocks</span> array. The code block will be
+            populated in the next step.
+          </li>
+          <li>
+            Inside of the <span class="code-symbol">while</span> loop,
+            call the <span class="code-symbol">drawBlock</span> function passing
+            the <span class="code-symbol">blocks</span> array's element at the value
+            of <span class="code-symbol">index</span>. See the first note below.
+          </li>
+          <li>
+            After the function call, set the value of
+            <span class="code-symbol">index</span> to be its current value plus 1.
           </li>
         </ol>
 				<h3>Notes</h3>
 				<ul>          
 					<li>
-						...
-					</li>					
+						Elements in an array can be accessed by putting the index of the desired element in
+            square brackets after the name of the array. The index of the first element is 0. So, to get the 
+            3rd element from myArray we use the following:
+            <p class="code-symbol left-indent">
+              myArray[2]
+            </p>
+            The 2 in this example can be replaced by a variable to get the element 
+            of the array at the index of the variable's value.
+					</li>
+          <li>
+            For more information on While Loops in Javascript, see the
+            <a href="https://www.w3schools.com/js/js_loop_while.asp" target="_blank">
+              W3 Schools reference</a>.
+          </li>
 				</ul>
       </div>
     </div>

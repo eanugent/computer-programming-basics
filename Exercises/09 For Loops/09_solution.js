@@ -51,7 +51,7 @@ function getAvatarColor(){
 }
 
 function drawBlocks(blocks){  
-  for(let index = 0; index < blocks.length; index = index + 1){
+  for(let index = 0; index < blocks.length; index++){
     drawBlock(blocks[index])
   }
 }

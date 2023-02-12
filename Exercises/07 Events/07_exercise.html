@@ -22,19 +22,64 @@
       </div>
       <div class="game-info">
         <p>
-          Events ...
+          Events allow our programs to respond when something happens. In 
+          this exercise we will enable our program to move the avatar when
+          the user presses an arrow key.
+
         </p>
         <h3>Instructions</h3>
-        <ol>
+        <ol class="instructions">
           <li>
-            ...
+            After the <span class="code-symbol">moveAvatar</span> function,
+            add a function named <span class="code-symbol">keyDownHandler</span>
+            that accepts one parameter named <span class="code-symbol">eventInfo</span>.
+          </li>
+          <li>
+            Inside of the <span class="code-symbol">keyDownHandler</span> function,
+            create a variable named <span class="code-symbol">spacesToMove</span> and initialize it
+            to a value of 10.
+          </li>
+          <li>
+            After the variable declaration, add 4 if/else if conditional blocks that execute based on
+            the value of the <span class="code-symbol">eventInfo</span> object's <span class="code-symbol">key</span>
+            property. The 4 values to test for are the following strings:
+            <ul>
+              <li>'ArrowLeft'</li>
+              <li>'ArrowRight'</li>
+              <li>'ArrowUp'</li>
+              <li>'ArrowDown'</li>
+            </ul>
+            The code blocks will be populated in the next step.
+          </li>
+          <li>
+            In each code block, call the appropriate
+            <span class="code-symbol">moveAvatar</span> function
+            (<span class="code-symbol">moveAvatarLeft</span>, 
+            <span class="code-symbol">moveAvatarRigft</span>, etc.) passing
+            <span class="code-symbol">spacesToMove</span> as the parameter.
+          </li>
+          <li>
+            In the <span class="code-symbol">initialize</span> function, register
+            the <span class="code-symbol">keyDownHandler</span> function as an event
+            listener for the 'keydown' event (see note below).
           </li>
         </ol>
 				<h3>Notes</h3>
 				<ul>          
 					<li>
-						...
-					</li>					
+						To register an event listener in Javascript, we use the <span class="code-symbol">addEventListener</span>
+            function of the globally-defined <span class="code-symbol">document</span> object. For example,
+            to register a function named <span class="code-symbol">mouseClickHandler</span> to be 
+            called whenever the mouse is clicked, we can use the following:
+            <p class="left-indent code-symbol" style="white-space: nowrap;">
+              document.addEventListener('click', mouseClickHandler)
+            </p>
+					</li>
+          <li>
+            For more information on Events in Javascript, see the
+            <a href="https://www.w3schools.com/js/js_events.asp" target="_blank">
+              W3 Schools reference</a>.
+          </li>
 				</ul>
       </div>
     </div>
